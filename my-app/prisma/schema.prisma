@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                Int        @id @default(autoincrement())
+  firstName         String
+  lastName          String
+  password          String
+  phoneNumber       String
+  email             String     @unique
+  avatar            String
+  role              String     @default("USER")
+  templates         Template[]
+  posts             Post[]     @relation("PostWrittenBy")
+  upvotedPosts      Post[]     @relation("PostLikedBy")
+  downvotedPosts    Post[]     @relation("PostDislikedBy")
+  comments          Comment[]  @relation("CommentWrittenBy")
+  upvotedComments   Comment[]  @relation("CommentLikedBy")
+  downvotedComments Comment[]  @relation("CommentDislikedBy")
+}
+
+model Post {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  tagId       Int
+  tag         Tag        @relation("PostTag", fields: [tagId], references: [id])
+  templates   Template[] @relation("PostTemplates")
+  comments    Comment[]  @relation("PostComments")
+  upvotes     Int
+  upvotedBy   User[]     @relation("PostLikedBy")
+  downvotes   Int
+  downvotedBy User[]     @relation("PostDislikedBy")
+  userId      Int
+  user        User       @relation("PostWrittenBy", fields: [userId], references: [id])
+  isHidden    Boolean    @default(false)
+  reports     Report[]
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  content     String
+  upvotes     Int
+  upvotedBy   User[]    @relation("CommentLikedBy")
+  downvotes   Int
+  downvotedBy User[]    @relation("CommentDislikedBy")
+  postId      Int
+  post        Post      @relation("PostComments", fields: [postId], references: [id])
+  replies     Comment[] @relation("CommentReplies")
+  parentId    Int?
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  userId      Int
+  user        User      @relation("CommentWrittenBy", fields: [userId], references: [id])
+  isHidden    Boolean   @default(false)
+  reports     Report[]
+}
+
+model Template {
+  id          Int     @id @default(autoincrement())
+  title       String
+  explanation String?
+  tags        Tag[]   @relation("TaggedBy")
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  Post        Post[]  @relation("PostTemplates")
+  code        String
+  isForked    Boolean @default(false)
+}
+
+model Tag {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  posts     Post[]     @relation("PostTag")
+  templates Template[] @relation("TaggedBy")
+}
+
+model Report {
+  id          Int      @id @default(autoincrement())
+  explanation String?
+  post        Post?    @relation(fields: [postId], references: [id])
+  postId      Int?
+  Comment     Comment? @relation(fields: [commentId], references: [id])
+  commentId   Int?
+}
