@@ -31,10 +31,15 @@ export default async function handler(req, res) {
 		}
 
 	} else if (req.method === "POST"){
-	
-		const { title, description, tagName, templates, userId} = req.body;
+	  
+		const { title, description, tagName, templates} = req.body;
+		const userCheck = verifyToken(req.headers.authorization);
+		if (!userCheck) {
+			return res.status(401).json({ error: "Unauthorized user" });
+		}
+		const userId = userCheck.userId;
 
-		if (!title || !description || !tagName || !userId) {
+		if (!title || !description || !tagName) {
 		    return res.status(400).json({ error: "Missing required fields" });
 		}
 		try {
@@ -70,8 +75,7 @@ export default async function handler(req, res) {
 				    templates: templates ? { connect: templates.map((id) => ({ id })) } : undefined,
 				    upvotes: 0,
 				    downvotes: 0,
-				    userId: uid,
-				   
+				    userId: userId,
 				    isHidden: false,
 
 			    },
@@ -79,7 +83,7 @@ export default async function handler(req, res) {
 		    res.status(201).json(post);
 		}
 		catch(error){
-			
+			console.error("Error creating post:", error); 
 			res.status(500).json({ message: "Failed to create a post." });
 
 		}

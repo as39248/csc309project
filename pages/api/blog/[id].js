@@ -39,6 +39,15 @@ export default async function handler(req, res) {
 	} else if (req.method === "POST"){
 		
 		const { action, editTitle, editDescription } = req.body;
+
+		const userCheck = verifyToken(req.headers.authorization);
+		if (!userCheck) {
+			return res.status(401).json({ error: "Unauthorized user" });
+		}
+		
+		const userId = userCheck.userId;
+
+        // rate the post
         if (action) {
             
             if (!["upvote", "downvote"].includes(action)) {
@@ -60,9 +69,23 @@ export default async function handler(req, res) {
             } catch (error) {
                 return res.status(500).json({ message: "Failed to update vote count." });
             }
+
+        // edit the post
         } else if (editTitle || editDescription) {
            
             try {
+            	const post = await prisma.post.findUnique({
+                    where: { id: Number(id) },
+                });
+
+                if (!post) {
+                    return res.status(404).json({ error: "Post not found" });
+                }
+
+                if (post.userId !== userId) {
+                    return res.status(403).json({ error: "Forbidden: You are not the owner of this post" });
+                }
+
                 const data = {};
 
                 if (editTitle) {
@@ -73,14 +96,14 @@ export default async function handler(req, res) {
                     data.description = editDescription;
                 }
 
-                const post = await prisma.post.update({
+                const editPost = await prisma.post.update({
                     where: {
                         id: Number(id),
                     },
                     data,
                 });
 
-                return res.status(201).json(post);
+                return res.status(201).json(editPost);
             } catch (error) {
                 return res.status(500).json({ message: "Failed to edit post." });
             }
@@ -89,7 +112,26 @@ export default async function handler(req, res) {
         }
 
 	} else if (req.method === "DELETE"){
+		
+		const userCheck = verifyToken(req.headers.authorization);
+		if (!userCheck) {
+			return res.status(401).json({ error: "Unauthorized user" });
+		}
+		
+		const userId = userCheck.userId;
 		try {
+			const post = await prisma.post.findUnique({
+                where: { id: Number(id) },
+            });
+
+            if (!post) {
+                return res.status(404).json({ error: "Post not found" });
+            }
+
+            if (post.userId !== userId) {
+                return res.status(403).json({ error: "Forbidden: You are not the owner of this post" });
+            }
+            
 			await prisma.post.delete({
 			    where: {
 				    id: Number(id),
@@ -98,6 +140,7 @@ export default async function handler(req, res) {
 		    return res.status(200).json({ message: 'Post Deleted'});
 		}
 		catch(error){
+			console.log(error);
 			res.status(500).json({ message: "Failed to delete a post." });
 
 		}

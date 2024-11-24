@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const BCRYPT_SALT_ROUNDS = 10;
-const JWT_SECRET = "sfrb098j24t";
-const JWT_EXPIRES_IN = "1h";
+const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS);
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
-const JWT_SECRET_REFRESH = "qpegnqepg9qp";
-const JWT_EXPIRES_IN_REFRESH = "7d";
+const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH;
+const JWT_EXPIRES_IN_REFRESH = process.env.JWT_EXPIRES_IN_REFRESH;
 
 export async function hashPassword(password) {
   return await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
