@@ -41,6 +41,14 @@ export default async function handler(req, res) {
                 return res.status(401).json({message: "Required information not given.",});
             }
 
+            const postExists = await prisma.post.findUnique({
+                where: {id: postId},
+            });
+
+            if (!postExists){
+                return res.status(404).json({message: "Comment does not exist."});
+            }
+
             // Change the visibility of the post
             const post = await prisma.post.update({
                 where: {id: Number(postId)},

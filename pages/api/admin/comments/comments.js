@@ -39,6 +39,14 @@ export default async function handler(req, res) {
             if (!commentId || !isHidden){
                 return res.status(401).json({message: "Required information not given.",});
             }
+
+            const commentExists = await prisma.comment.findUnique({
+                where: {id: commentId},
+            });
+
+            if (!commentExists){
+                return res.status(404).json({message: "Comment does not exist."});
+            }
             
             // Change the visibility of the comment
             const comment = await prisma.comment.update({
