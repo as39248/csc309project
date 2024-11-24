@@ -5,6 +5,9 @@ const BCRYPT_SALT_ROUNDS = 10;
 const JWT_SECRET = "sfrb098j24t";
 const JWT_EXPIRES_IN = "1h";
 
+const JWT_SECRET_REFRESH = "qpegnqepg9qp";
+const JWT_EXPIRES_IN_REFRESH = "7d";
+
 export async function hashPassword(password) {
   return await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
 }
@@ -31,4 +34,10 @@ export function verifyToken(token) {
   } catch (err) {
     return null;
   }
+}
+
+export function generateRefreshToken(obj){
+  return jwt.sign(obj, JWT_SECRET_REFRESH, {
+    expiresIn: JWT_EXPIRES_IN_REFRESH,
+  });
 }
