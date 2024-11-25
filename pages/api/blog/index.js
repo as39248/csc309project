@@ -6,8 +6,7 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
 	if (req.method === "GET") {
 
-		const { search } = req.body;
-		console.log(search);
+		const { search } = req.query;
 
 		try {
 			let posts = await prisma.post.findMany({

@@ -45,6 +45,27 @@ export default async function handler(req, res) {
             }
 
             try {
+                const comment = await prisma.comment.findUnique({
+                    where: { id: Number(id) },
+                    include: {
+                        upvotedBy: true,
+                        downvotedBy: true,
+                    },
+                });
+
+                if (!post) {
+                    return res.status(404).json({ error: "comment not found" });
+                }
+
+                const hasUpvoted = comment.upvotedBy.some((user) => user.id === userId);
+                const hasDownvoted = comment.downvotedBy.some((user) => user.id === userId);
+
+                if (hasUpvoted || hasDownvoted) {
+                    return res.status(400).json({
+                        error: "You have already voted on this comment."
+                    });
+                }
+
                 const updateData =
                     action === "upvote"
                         ? { upvotes: { increment: 1 } }
@@ -82,9 +103,26 @@ export default async function handler(req, res) {
         }
 
     } else if (req.method === "DELETE") {
+        const userCheck = verifyToken(req.headers.authorization);
+        if (!userCheck) {
+            return res.status(401).json({ error: "Unauthorized user" });
+        }
+        const userId = userCheck.userId;
 
-        
         try {
+
+            const comment = await prisma.comment.findUnique({
+                where: { id: Number(id) },
+            });
+
+            if (!post) {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+
+            if (post.userId !== userId) {
+                return res.status(403).json({ error: "Forbidden: You are not the owner of this comment" });
+            }
+
             await prisma.comment.delete({
                 where: { id: Number(id) },
             });
