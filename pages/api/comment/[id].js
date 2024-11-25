@@ -32,7 +32,12 @@ export default async function handler(req, res) {
 
     } else if (req.method === "POST") {
 
-        const { action, content, userId } = req.body;
+        const { action, content } = req.body;
+        const userCheck = verifyToken(req.headers.authorization);
+        if (!userCheck) {
+            return res.status(401).json({ error: "Unauthorized user" });
+        }
+        const userId = userCheck.userId;
 
         if (action) {
             if (!["upvote", "downvote"].includes(action)) {
@@ -54,7 +59,7 @@ export default async function handler(req, res) {
             } catch (error) {
                 return res.status(500).json({ message: "Failed to update vote count." });
             }
-        } else if (content && userId) {
+        } else if (content) {
             
             try {
                 const reply = await prisma.comment.create({

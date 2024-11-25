@@ -33,16 +33,15 @@ export default async function handler(req, res) {
 
 
 	else if (req.method === "POST"){
-/*
-        const user = verifyToken(req.headers.authorization);
 
-        if (!user){
-            return res.status(401).json({message: "Unauthorized",});
+		const { content, postId, parentId } = req.body;
+        const userCheck = verifyToken(req.headers.authorization);
+        if (!userCheck) {
+            return res.status(401).json({ error: "Unauthorized user" });
         }
-*/
-		const { content, postId, parentId, userId } = req.body;
+        const userId = userCheck.userId;
 
-		if (!content || !postId || !userId) {
+		if (!content || !postId) {
             return res.status(400).json({ error: "Missing required fields" });
         }
         try {

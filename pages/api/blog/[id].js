@@ -55,18 +55,44 @@ export default async function handler(req, res) {
             }
 
             try {
+            	const post = await prisma.post.findUnique({
+                    where: { id: Number(id) },
+                    include: {
+                        upvotedBy: true,
+                        downvotedBy: true,
+                    },
+                });
+
+                if (!post) {
+                    return res.status(404).json({ error: "Post not found" });
+                }
+
+            	const hasUpvoted = post.upvotedBy.some((user) => user.id === userId);
+                const hasDownvoted = post.downvotedBy.some((user) => user.id === userId);
+
+                if (hasUpvoted || hasDownvoted) {
+                    return res.status(400).json({
+                        error: "You have already voted on this post."
+                    });
+                }
                 const updateData =
                     action === "upvote"
-                        ? { upvotes: { increment: 1 } }
-                        : { downvotes: { increment: 1 } };
+                        ? { upvotes: { increment: 1 },
+                            upvotedBy: { connect: { id: userId } },
+                        }
+                        : { downvotes: { increment: 1 },
+                          downvotedBy: { connect: { id: userId } },
+                        };
 
                 const updatedPost = await prisma.post.update({
                     where: { id: Number(id) },
                     data: updateData,
                 });
 
+
                 return res.status(200).json(updatedPost);
             } catch (error) {
+            	console.log(error);
                 return res.status(500).json({ message: "Failed to update vote count." });
             }
 

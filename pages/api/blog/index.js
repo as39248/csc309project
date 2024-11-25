@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
 	if (req.method === "GET") {
 
-		const { search } = req.query;
+		const { search } = req.body;
+		console.log(search);
 
 		try {
 			let posts = await prisma.post.findMany({
@@ -19,9 +20,9 @@ export default async function handler(req, res) {
 					],
 				},
 				include: {
-                    tag: true,
-                    templates: true,
-                },
+            tag: true,
+            templates: true,
+        },
 			});
 			posts = posts.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
 			res.status(200).json(posts);
