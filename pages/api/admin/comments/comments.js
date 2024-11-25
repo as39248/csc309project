@@ -16,9 +16,12 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "GET") {
+        const {skip, take} = req.query
         try{
             // Fetch all comments, sort by the number of reports in descending order
             const comments = await prisma.comment.findMany({
+                skip: skip,
+                take: take,
                 orderBy: {
                     reports:{
                         _count: 'desc',

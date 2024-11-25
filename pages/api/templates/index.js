@@ -19,11 +19,11 @@ export default async function handler(req, res) {
             
             // Sort tags based on whether they already exist or not
            const connectTags = tags.map((tag)=> {
-                    		return {
-                    			where: {name: tag},
-                    			create: {name: tag}
-                    		};
-                    	} );
+                return {
+                    where: {name: tag},
+                    create: {name: tag}
+                };
+            } );
             // Create a new template
             const newTemplate = await prisma.template.create({
                 data: {
@@ -44,22 +44,14 @@ export default async function handler(req, res) {
         }
     }
     else if (req.method === 'GET'){
-        const user = verifyToken(req.headers.authorization);
-
-        if  (!user){
-            return res.status(401).json({message: "Unauthorized"});
-        }
         
-        const {title, explanation, tags, code, all} = req.query;
-
-        let userId = user.userId;
-        if(user.role === 'VISITOR' || all === "true"){
-        		userId = null;
-        }
+        const {title, explanation, tags, code, userId, skip, take} = req.query;
 
         try {
             // search through all templates
             const templates = await prisma.template.findMany({
+                skip: skip,
+                take: take,
                 where:{
                     title: title ? {contains: title} : undefined,
                     explanation: explanation ? {contains: explanation} : undefined,
