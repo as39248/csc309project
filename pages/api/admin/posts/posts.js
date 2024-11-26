@@ -21,8 +21,8 @@ export default async function handler(req, res) {
         try{
             // Fetch all posts
             const posts = await prisma.post.findMany({
-                skip: skip,
-                take: take,
+                take: Number(take) || 10,
+                skip: Number(skip) || 0,
                 orderBy: {
                     reports:{
                         _count: 'desc',
