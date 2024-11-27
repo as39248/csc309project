@@ -31,7 +31,9 @@ const SelectedTemplate: React.FC = () => {
           setErrorMessage("Unauthorized");
           return;
         }
+
         console.log(token);
+        
         const response = await fetch(`/api/templates/${id}`, {
           method: "DELETE",
           headers: {
