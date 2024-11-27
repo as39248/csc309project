@@ -6,7 +6,7 @@ interface Template {
   id: number,
   title: string;
   explanation: string;
-  tag: string;
+  tags: string;
   code: string;
 }
 
@@ -17,12 +17,12 @@ const TemplatePage: React.FC = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null); 
   const router = useRouter();
 
-  const handleSearch = async ({ title, explanation, tag, code, skip }: { title?: string; explanation?: string; tag?: string; code?: string; skip?: number, }) => {
+  const handleSearch = async ({ title, explanation, tags, code, skip }: { title?: string; explanation?: string; tags?: string; code?: string; skip?: number, }) => {
     try {
       const query = new URLSearchParams();
       if (title) query.append("title", title);
       if (explanation) query.append("explanation", explanation);
-      if (tag) query.append("tag", tag);
+      if (tags) query.append("tags", tags);
       if (code) query.append("code", code);
       // if (skip) query.append("skip", skip);
 

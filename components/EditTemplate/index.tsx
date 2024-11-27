@@ -6,17 +6,17 @@ interface EditTemplateProps {
         id: number,
         title: string;
         explanation: string;
-        tag: string;
+        tags: string;
         code: string;
     }
-  onSubmit: (updatedTemplate: { title: string; explanation: string; tag: string; code:string; }) => void;
+  onSubmit: (updatedTemplate: { title: string; explanation: string; tags: string; code:string; }) => void;
   onCancel: () => void;
 }
 
 const EditTemplate: React.FC<EditTemplateProps> = ({ template, onSubmit, onCancel }) => {
   const [title, setTitle] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [tag, setTag] = useState("");
+  const [tags, setTag] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -24,19 +24,19 @@ const EditTemplate: React.FC<EditTemplateProps> = ({ template, onSubmit, onCance
   useEffect(() => {
     setTitle(template.title);
     setExplanation(template.explanation);
-    setTag(template.tag);
+    setTag(template.tags);
     setCode(template.code);
   }, [template]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title && !explanation && !tag && !code) {
+    if (!title && !explanation && !tags && !code) {
       setError("At least 1 field is required.");
       return;
     }
 
-    onSubmit({ title, explanation, tag, code});
+    onSubmit({ title, explanation, tags, code});
     router.push(`/templates/${template.id}`);
   };
 
@@ -62,15 +62,15 @@ const EditTemplate: React.FC<EditTemplateProps> = ({ template, onSubmit, onCance
       ></textarea>
       <input
         type="text"
-        value={tag}
+        value={tags}
         onChange={(e) => setTag(e.target.value)}
-        placeholder="Tag"
+        placeholder="tags"
         className="w-full p-2 border border-gray-300 text-black rounded"
       />
       <input
         type="text"
         value={code}
-        onChange={(e) => setTag(e.target.value)}
+        onChange={(e) => setCode(e.target.value)}
         placeholder="Code"
         className="w-full p-2 border border-gray-300 text-black rounded"
       />

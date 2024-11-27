@@ -5,7 +5,7 @@ interface Template {
   id: number,
   title: string;
   explanation: string;
-  tag: string;
+  tags: string;
   code: string;
   userId: number;
   isForked: boolean;
@@ -132,7 +132,7 @@ const SelectedTemplate: React.FC = () => {
           id: selectedTemplate.id,
           title: selectedTemplate.title,
           explanation: selectedTemplate.explanation,
-          tag: selectedTemplate.tag,
+          tags: selectedTemplate.tags,
           code: selectedTemplate.code,
         },
       });
@@ -196,11 +196,11 @@ const SelectedTemplate: React.FC = () => {
 
               <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
               <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
-              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
+              <p className="mt-2 text-sm text-gray-600">Tags: {selectedTemplate.tags}</p>
               <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.code}</p>
 
-              {selectedTemplate.tag && (
-                <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
+              {selectedTemplate.tags && (
+                <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tags}</p>
               )}
             </>
           ) : (

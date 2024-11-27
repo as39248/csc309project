@@ -6,7 +6,7 @@ interface Template {
   id: number,
   title: string;
   explanation: string;
-  tag: string;
+  tags: string;
   code: string;
 }
 
@@ -40,7 +40,7 @@ const EditTemplatePage: React.FC = () => {
     }
   };
 
-  const handleEditSubmit = async (updatedTemplate: { title: string; explanation: string; tag: string, code:string }) => {
+  const handleEditSubmit = async (updatedTemplate: { title: string; explanation: string; tags: string, code:string }) => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -57,7 +57,7 @@ const EditTemplatePage: React.FC = () => {
         body: JSON.stringify({
           title: updatedTemplate.title,
           explanation: updatedTemplate.explanation,
-          tag: updatedTemplate.tag,
+          tags: updatedTemplate.tags,
           code: updatedTemplate.code,
         }),
       });
@@ -87,7 +87,7 @@ const EditTemplatePage: React.FC = () => {
               id: template.id,
               title: template.title,
               explanation: template.explanation,
-              tag: template.tag,
+              tags: template.tags,
               code: template.code,
             }}
             onSubmit={handleEditSubmit}
