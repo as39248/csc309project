@@ -30,6 +30,7 @@ const TemplatePage: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
+        console.log(data.error);
         throw new Error("Failed to fetch results.");
       }
       
