@@ -36,6 +36,7 @@ const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
 
   return (
     <div className="flex flex-col space-y-1">
+      <h1 className="text-5xl font-bold text-black text-center mb-4">Blogs</h1>
       <input
         type="text"
         placeholder="Search by Title"

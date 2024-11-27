@@ -66,7 +66,7 @@ export default async function handler(req, res) {
 		const userId = userCheck.userId;
 
 		if (!title || !description || !tagName) {
-		    return res.status(400).json({ error: "Missing required fields" });
+		    return res.status(444).json({ error: "Missing required fields" });
 		}
 		try {
 
