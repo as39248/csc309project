@@ -127,7 +127,7 @@ const SelectedTemplate: React.FC = () => {
     };
 
     return (
-      <div className="mt-8 w-full max-w-3xl">
+      <div className="mt-8 w-full max-w-3xl items-center justify-center min-h-screen">
       
         <div className="p-6 bg-white rounded shadow">
           <button
@@ -136,6 +136,8 @@ const SelectedTemplate: React.FC = () => {
           >
             Back to Results
           </button>
+
+          <p className="mt-2 text-gray-300">*Only the owner of the template can update and delete it</p>
                     
           {selectedTemplate ? (
             <>
@@ -165,7 +167,7 @@ const SelectedTemplate: React.FC = () => {
                   onClick={() => handleUpdateTemplate()}
                   className="bg-gray-100 text-blue-600 border border-gray-400 px-4 py-2 rounded hover:bg-red-600 hover:text-gray-100 focus:outline-none"
                 >
-                  Update Template - only template owner authorized
+                  Update Template
                 </button>
               </div>
 
@@ -181,6 +183,9 @@ const SelectedTemplate: React.FC = () => {
 
               <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
               <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
+              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
+              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.code}</p>
+
               {selectedTemplate.tag && (
                 <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
               )}
