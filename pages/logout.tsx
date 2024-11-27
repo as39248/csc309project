@@ -7,6 +7,7 @@ const Logout = () => {
   useEffect(() => {
   
     localStorage.setItem("accessToken", "");
+    localStorage.setItem("userId", "");
     router.push("/login");
   }, [router]);
 

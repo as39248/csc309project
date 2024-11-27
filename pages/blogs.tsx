@@ -12,20 +12,11 @@ interface Post {
   downvotes: number;
 }
 
-interface Comment {
-  id: number;
-  content: string;
-  upvotes: number;
-  downvotes: number;
-  user: { firstName: string; lastName: string };
-  replies: Comment[];
-  parentId?: number;
-}
-
 const Blogs: React.FC = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [results, setResults] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSearch = async ({
     title,
@@ -62,7 +53,16 @@ const Blogs: React.FC = () => {
   };
 
   const handleCreatePost = () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setShowPopup(true);
+      return;
+    }
     router.push("/createPost");
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -77,6 +77,22 @@ const Blogs: React.FC = () => {
         </button>
       </div>
 
+      {/* Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg text-center">
+            <h2 className="text-lg font-bold mb-4">Not Logged In</h2>
+            <p className="mb-6">You need to log in to create a post.</p>
+            <button
+              onClick={closePopup}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Search Bar */}
       <div className="mt-4 w-full max-w-md">
         <SearchBar onSearch={handleSearch} />
@@ -90,7 +106,7 @@ const Blogs: React.FC = () => {
               <li
                 key={post.id}
                 className="p-4 bg-white rounded shadow cursor-pointer"
-                onClick={() => handlePostClick(post.id)} 
+                onClick={() => handlePostClick(post.id)}
               >
                 <h2 className="text-lg font-bold text-blue-500 hover:underline">
                   {post.title}
@@ -105,9 +121,7 @@ const Blogs: React.FC = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 mt-4">
-            {error || "No results found."}
-          </p>
+          <p className="text-gray-500 mt-4">{error || "No results found."}</p>
         )}
       </div>
     </div>

@@ -55,6 +55,7 @@ const LoginPage: React.FC = () => {
       if (response.ok) {
         // Handle successful login
         localStorage.setItem("accessToken", data.accessToken); // For the current session
+        localStorage.setItem("userId", data.userId);
         localStorage.setItem("refreshToken", data.refreshToken);
 
         router.push("/loginSuccess"); // Redirect to dashboard or another page

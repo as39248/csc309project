@@ -34,7 +34,7 @@ export default async function handler(req, res) {
                 return res.status(500).json({ message: "Couldn't generate refresh token for user creation." });
             }
 
-            return res.status(200).json({"accessToken": token, "refreshToken": refreshToken});
+            return res.status(200).json({"userId": user.id, "accessToken": token, "refreshToken": refreshToken});
         }catch(error){
             res.status(500).json({message: "Failed login.", error: error});
         }       

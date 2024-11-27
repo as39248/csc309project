@@ -32,6 +32,8 @@ const BlogDetails: React.FC = () => {
   const [isPosting, setIsPosting] = useState<boolean>(false);
   const [replyContent, setReplyContent] = useState<string>("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string>("");
 
   useEffect(() => {
     if (id) {
@@ -65,12 +67,19 @@ const BlogDetails: React.FC = () => {
       setError("Failed to fetch comments.");
     }
   };
+  const showPopupWithMessage = (message: string) => {
+    setPopupMessage(message);
+    setShowPopup(true);
+  };
 
   const handleBlogVote = async (action: "upvote" | "downvote") => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("Unauthorized");
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      showPopupWithMessage("You must log in to vote.");
+      return;
+    }
 
+    try {
       const response = await fetch(`/api/blog/${id}`, {
         method: "POST",
         headers: {
@@ -80,15 +89,24 @@ const BlogDetails: React.FC = () => {
         body: JSON.stringify({ action }),
       });
 
-      if (!response.ok) throw new Error("Failed to update vote");
-
-      const updatedPost = await response.json();
-      setPost(updatedPost);
+      if (!response.ok) {
+        const data = await response.json();
+        if (data.error === "You have already voted on this post.") {
+          showPopupWithMessage(data.error);
+        } else {
+          throw new Error("Failed to update vote");
+        }
+      } else {
+        const updatedPost = await response.json();
+        setPost(updatedPost);
+      }
     } catch (err) {
       console.error("Error updating vote:", err);
       setError("Failed to update vote.");
     }
   };
+
+
 
   const handleNewCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,10 +141,13 @@ const BlogDetails: React.FC = () => {
     commentId: number,
     action: "upvote" | "downvote"
   ) => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("Unauthorized");
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      showPopupWithMessage("You must log in to vote on comments.");
+      return;
+    }
 
+    try {
       const response = await fetch(`/api/comment/${commentId}`, {
         method: "POST",
         headers: {
@@ -136,25 +157,39 @@ const BlogDetails: React.FC = () => {
         body: JSON.stringify({ rating: action }),
       });
 
-      if (!response.ok) throw new Error("Failed to rate comment");
-
-      const updatedComment = await response.json();
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === commentId ? updatedComment : comment
-        )
-      );
+      if (!response.ok) {
+        const data = await response.json();
+        if (data.error === "You have already voted on this comment.") {
+          showPopupWithMessage(data.error);
+        } else {
+          throw new Error("Failed to rate comment");
+        }
+      } else {
+        const updatedComment = await response.json();
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment.id === commentId ? updatedComment : comment
+          )
+        );
+      }
     } catch (err) {
       console.error("Error rating comment:", err);
       setError("Failed to rate comment.");
     }
   };
 
+
   const handleReplySubmit = async (parentId: number) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      showPopupWithMessage("You must log in to reply to a comment.");
+      return;
+    }
+
     if (!replyContent.trim()) return;
 
     try {
-      const token = localStorage.getItem("accessToken");
+      
       const response = await fetch(`/api/comment`, {
         method: "POST",
         headers: {
@@ -187,7 +222,20 @@ const BlogDetails: React.FC = () => {
   };
 
   const handleEditPost = () => {
-    if (post) {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      showPopupWithMessage("You must log in to edit this post.");
+      return;
+    }
+  
+    const userId = parseInt(localStorage.getItem("userId") || "0", 10);
+    if (post && post.user) {
+    
+        if (post.user.id !== userId) {
+          showPopupWithMessage("You are not authorized to edit this post.");
+          return;
+        }
+
       router.push({
         pathname: `/editPost`,
         query: {
@@ -200,9 +248,28 @@ const BlogDetails: React.FC = () => {
     }
   };
 
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full max-w-3xl p-6 bg-white rounded shadow mt-8">
+        {showPopup && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded shadow-lg text-center">
+              <h2 className="text-lg font-bold mb-4">Message</h2>
+              <p className="mb-6">{popupMessage}</p>
+              <button
+                onClick={closePopup}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Return Button */}
         <button
           onClick={() => router.push("/blogs")}
@@ -222,7 +289,7 @@ const BlogDetails: React.FC = () => {
             <div className="mt-4 flex space-x-4">
               <button
                 className="text-blue-500 hover:underline mb-4"
-                onClick={() => handleEditPost()}
+                onClick={handleEditPost}
               >
                 Edit
               </button>
