@@ -89,7 +89,7 @@ const SelectedTemplate: React.FC = () => {
           setErrorMessage("Unauthorized");
           return;
         }
-        const forked = true;
+        const isForked = true;
 
         const rep = await fetch(`/api/templates/${id}`);
 
@@ -100,7 +100,7 @@ const SelectedTemplate: React.FC = () => {
 
         const data1 = await rep.json();
 
-        const {title, explanation, tags, userId, code, isForked} = data1;
+        const {title, explanation, tags, userId, code, isForkedtemp} = data1;
 
         const response = await fetch(`/api/templates`, {
           method: "POST",
@@ -108,7 +108,7 @@ const SelectedTemplate: React.FC = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ title, explanation, tags, code, forked })
+          body: JSON.stringify({ title, explanation, tags, code, isForked})
         });
   
         if (!response.ok) {
