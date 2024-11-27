@@ -48,7 +48,7 @@ const EditTemplatePage: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`/api/blog/${id}`, {
+      const response = await fetch(`/api/templates/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
