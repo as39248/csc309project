@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { hashPassword } from "../../../../utils/auth";
 
 const prisma = new PrismaClient();
-const avatars = ["@public/avatars/avatar1", "@public/avatars/avatar2", "@public/avatars/avatar3"];       
+const avatars = ["/avatars/avatar1.png", "/avatars/avatar2.png", "/avatars/avatar3.png"];       
 
 export default async function handler(req, res) {
     if (req.method === "POST") { 
