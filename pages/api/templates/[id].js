@@ -80,14 +80,14 @@ export default async function handler(req, res) {
                 return res.status(200).json({message: "Template deletion successful."});
            }
         } catch (error) {
-            return res.status(500).json({message: "Failed to delete template.", error:error});
+            return res.status(500).json({message: "Failed to delete template.", error: error});
         }  
     }
     else if (req.method === 'GET'){
         const {id} = req.query;
         try {
             // Search for a specific template
-           const template = await prisma.user.findUnique({
+           const template = await prisma.template.findUnique({
             where:{
                 id: Number(id),
             }
