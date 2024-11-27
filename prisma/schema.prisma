@@ -35,8 +35,7 @@ model Post {
   id          Int        @id @default(autoincrement())
   title       String
   description String
-  tagId       Int
-  tag         Tag        @relation("PostTag", fields: [tagId], references: [id])
+  tag         String?        
   templates   Template[] @relation("PostTemplates")
   comments    Comment[]  @relation("PostComments")
   upvotes     Int
@@ -71,19 +70,12 @@ model Template {
   id          Int     @id @default(autoincrement())
   title       String
   explanation String?
-  tags        Tag[]   @relation("TaggedBy")
+  tags        String?   
   userId      Int
   user        User    @relation(fields: [userId], references: [id])
   Post        Post[]  @relation("PostTemplates")
   code        String
   isForked    Boolean @default(false)
-}
-
-model Tag {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  posts     Post[]     @relation("PostTag")
-  templates Template[] @relation("TaggedBy")
 }
 
 model Report {
