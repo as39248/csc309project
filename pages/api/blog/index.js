@@ -6,29 +6,55 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
 	if (req.method === "GET") {
 
-		const { search } = req.query;
+  const { title, content, tag, template } = req.query;
 
-		try {
-			let posts = await prisma.post.findMany({
-				where: {
-					OR: [
-						{ title: { contains: search } },
-        				{ description: { contains: search} },
-        				{ tag: { name: { contains: search} } },
-        				{ templates: { some: { title: { contains: search} } } },
-					],
-				},
-				include: {
-            tag: true,
-            templates: true,
+  try {
+   
+    let whereClause = {
+      AND: [],
+    };
+
+    if (title) {
+      whereClause.AND.push({ title: { contains: title, } });
+    }
+
+    if (content) {
+      whereClause.AND.push({ description: { contains: content,  } });
+    }
+
+    if (tag) {
+      whereClause.AND.push({ tag: { name: { contains: tag,  } }});
+    }
+
+    if (template) {
+      whereClause.AND.push({
+        templates: {
+          some: {
+            title: { contains: template, },
+          },
         },
-			});
-			posts = posts.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
-			res.status(200).json(posts);
-		} catch (error) {
-			console.log(error);
-			res.status(500).json({ message: "Failed to retrieve posts." });
-		}
+      });
+    }
+
+    const posts = await prisma.post.findMany({
+      where: whereClause.AND.length > 0 ? whereClause : undefined,
+      include: {
+        tag: true,
+        templates: true,
+      },
+    });
+    
+    const sortedPosts = posts.sort((a, b) => 
+      (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)
+    );
+
+    res.status(200).json(sortedPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to retrieve posts." });
+  }
+
+
 
 	} else if (req.method === "POST"){
 	  

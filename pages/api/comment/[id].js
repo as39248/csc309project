@@ -16,7 +16,11 @@ export default async function handler(req, res) {
             const comment = await prisma.comment.findUnique({
                 where: { id: Number(id) },
                 include: {
-                    replies: true,
+                    replies: {
+                        include: {
+                            user: true,
+                        },
+                    },
                     post: true, 
                 },
             });
@@ -27,36 +31,38 @@ export default async function handler(req, res) {
 
             return res.status(200).json(comment);
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ message: "Failed to retrieve comment." });
         }
 
     } else if (req.method === "POST") {
 
-        const { action, content } = req.body;
+        const { rating, content } = req.body;
         const userCheck = verifyToken(req.headers.authorization);
         if (!userCheck) {
             return res.status(401).json({ error: "Unauthorized user" });
         }
         const userId = userCheck.userId;
+        
 
-        if (action) {
-            if (!["upvote", "downvote"].includes(action)) {
-                return res.status(400).json({ error: "Invalid action type" });
-            }
+        const comment = await prisma.comment.findUnique({
+            where: { id: Number(id) },
+            include: {
+                upvotedBy: true,
+                downvotedBy: true,
+            },
+        });
+        if (!comment) {
+            return res.status(404).json({ error: "comment not found" });
+        }
 
+        if (rating) {
+        
             try {
-                const comment = await prisma.comment.findUnique({
-                    where: { id: Number(id) },
-                    include: {
-                        upvotedBy: true,
-                        downvotedBy: true,
-                    },
-                });
-
-                if (!post) {
-                    return res.status(404).json({ error: "comment not found" });
+                if (!["upvote", "downvote"].includes(rating)) {
+                    return res.status(400).json({ error: "Invalid rating type" });
                 }
-
+                
                 const hasUpvoted = comment.upvotedBy.some((user) => user.id === userId);
                 const hasDownvoted = comment.downvotedBy.some((user) => user.id === userId);
 
@@ -67,17 +73,30 @@ export default async function handler(req, res) {
                 }
 
                 const updateData =
-                    action === "upvote"
-                        ? { upvotes: { increment: 1 } }
-                        : { downvotes: { increment: 1 } };
+                    rating === "upvote"
+                        ? { upvotes: { increment: 1 },
+                            upvotedBy: { connect: { id: userId } }, 
+                        }
+                        : { downvotes: { increment: 1 },
+                            downvotedBy: { connect: { id: userId } },
+                        };
 
                 const updatedComment = await prisma.comment.update({
                     where: { id: Number(id) },
                     data: updateData,
+                    include: {
+                        user: true,
+                        replies: {
+                            include: {
+                                user: true,
+                            },
+                        }
+                    },
                 });
 
                 return res.status(200).json(updatedComment);
             } catch (error) {
+                console.log(error);
                 return res.status(500).json({ message: "Failed to update vote count." });
             }
         } else if (content) {
@@ -88,7 +107,7 @@ export default async function handler(req, res) {
                         content,
                         parentId: Number(id),
                         userId: Number(userId),
-                        postId: Number(postId),
+                        postId: Number(comment.postId),
                         upvotes: 0,
                         downvotes: 0,
                     },
@@ -96,10 +115,11 @@ export default async function handler(req, res) {
 
                 return res.status(201).json(reply);
             } catch (error) {
+                console.log(error);
                 return res.status(500).json({ message: "Failed to create reply." });
             }
         } else {
-            return res.status(400).json({ error: "Invalid request: Missing action or reply fields." });
+            return res.status(400).json({ error: "Invalid request: Missing rating or reply fields." });
         }
 
     } else if (req.method === "DELETE") {
@@ -122,6 +142,13 @@ export default async function handler(req, res) {
             if (post.userId !== userId) {
                 return res.status(403).json({ error: "Forbidden: You are not the owner of this comment" });
             }
+            await prisma.comment.deleteMany({
+                where: { postId: Number(id) },
+            });
+           
+            await prisma.template.deleteMany({
+                where: { postId: Number(id) },
+            });
 
             await prisma.comment.delete({
                 where: { id: Number(id) },

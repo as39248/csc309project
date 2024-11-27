@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
      if (req.method === "GET") {
 
-        const { postId } = req.body;
+        const { postId } = req.query;
 
         try {
                  
@@ -16,11 +16,16 @@ export default async function handler(req, res) {
                 },
                 include: {
                     user: true, 
-                    replies: true,
+                    post: true,
+                    replies: {
+                        include: {
+                            user:true,
+                        },
+                    },
                 },
             });
             comments = comments.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
-            res.status(200).json(comments);
+            return res.status(200).json(comments);
 
 
         } catch (error) {
@@ -29,8 +34,6 @@ export default async function handler(req, res) {
         }
 
     } 
-
-
 
 	else if (req.method === "POST"){
 
@@ -54,16 +57,21 @@ export default async function handler(req, res) {
                     upvotes: 0,
                     downvotes: 0,
                 },
+                include: {
+                    user: true,
+                    replies: true,
+                },
             });
             
-            res.status(201).json(comment);
+            return res.status(201).json(comment);
 
         } catch (error) {
-            res.status(500).json({ message: "Failed to create a comment." });
+            console.log(error);
+            return res.status(500).json({ message: "Failed to create a comment." });
         }
 
 
 	} else {
-        res.status(405).json({ message: "Method not allowed" });
+        return res.status(405).json({ message: "Method not allowed" });
     }
 }
