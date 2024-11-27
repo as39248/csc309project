@@ -31,8 +31,8 @@ const EditTemplate: React.FC<EditTemplateProps> = ({ template, onSubmit, onCance
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title || !explanation || !tag || !code) {
-      setError("All fields are required.");
+    if (!title && !explanation && !tag && !code) {
+      setError("At least 1 field is required.");
       return;
     }
 

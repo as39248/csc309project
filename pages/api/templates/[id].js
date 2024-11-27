@@ -12,8 +12,8 @@ export default async function handler(req, res) {
             return res.status(401).json({message: "Unauthorized",});
         }
 
-        const {id, title, explanation, tags, code} = req.query;
-        // const {} = req.body;
+        const {id} = req.query;
+        const {title, explanation, tags, code} = req.body;
         
         // Store the data that needs to be updated
         let updatedData = {};
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         }
         
         if (code) {
-        		updatedData.code = code;
+        	updatedData.code = code;
         }
         try {
             // Update template
