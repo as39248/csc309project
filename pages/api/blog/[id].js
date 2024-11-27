@@ -20,7 +20,13 @@ export default async function handler(req, res) {
 				    id: Number(id),
 			    },
 			    include: {
-                    tag: true,
+            
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                        },
+                    },
                     templates: true, 
                     comments: true, 
                 },
@@ -31,6 +37,7 @@ export default async function handler(req, res) {
 		    }
 		    return res.status(200).json(post);
 	    } catch (error) {
+            console.log(error);
 	    	return res.status(500).json({ message: "Failed to retrieve post." });
 	    }
 		
@@ -123,7 +130,7 @@ export default async function handler(req, res) {
                 }
 
                 if (editTag) {
-                    data.tag.name = editTag;
+                    data.tag = editTag;
                 }  
 
                 const editPost = await prisma.post.update({

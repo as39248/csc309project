@@ -102,7 +102,7 @@ const Blogs: React.FC = () => {
           </ul>
         ) : (
           <p className="text-gray-500 mt-4">
-            {error || "No results found. Try refining your search."}
+            {error || "No results found."}
           </p>
         )}
       </div>

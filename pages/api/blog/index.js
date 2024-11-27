@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     }
 
     if (tag) {
-      whereClause.AND.push({ tag: { name: { contains: tag,  } }});
+      whereClause.AND.push({ tag:  { contains: tag,  } });
     }
 
     if (template) {
@@ -39,7 +39,6 @@ export default async function handler(req, res) {
     const posts = await prisma.post.findMany({
       where: whereClause.AND.length > 0 ? whereClause : undefined,
       include: {
-        tag: true,
         templates: true,
       },
     });
@@ -79,25 +78,13 @@ export default async function handler(req, res) {
           }
           let uid = user.id;
 
-          let tag = await prisma.tag.findUnique({
-            where: { name: tagName },
-           });
-          
-          if (!tag) {
-            tag = await prisma.tag.create({
-            	data: {
-            		name: tagName,
-            	},
-            })
-          }
-          let tid = tag.id;
 
          
 			const post = await prisma.post.create({
 			    data : {
 				    title,
 				    description,
-				    tagId: tid,
+				    tag: tagName,
 				    templates: templates ? { connect: templates.map((id) => ({ id })) } : undefined,
 				    upvotes: 0,
 				    downvotes: 0,

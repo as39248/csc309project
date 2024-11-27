@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface EditPostProps {
   post: {
@@ -16,9 +17,9 @@ const EditPost: React.FC<EditPostProps> = ({ post, onSubmit, onCancel }) => {
   const [description, setDescription] = useState("");
   const [tagName, setTagName] = useState("");
   const [error, setError] = useState<string | null>(null);
-
+  const router = useRouter();
+  
   useEffect(() => {
-    // Populate fields with the existing post data
     setTitle(post.title);
     setDescription(post.description);
     setTagName(post.tagName);
@@ -33,6 +34,7 @@ const EditPost: React.FC<EditPostProps> = ({ post, onSubmit, onCancel }) => {
     }
 
     onSubmit({ title, description, tagName });
+    router.push(`/blog/${post.id}`);
   };
 
   return (

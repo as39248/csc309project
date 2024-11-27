@@ -5,7 +5,7 @@ interface Post {
   id: number;
   title: string;
   description: string;
-  tag: { name: string };
+  tag: string;
   upvotes: number;
   downvotes: number;
 }
@@ -193,7 +193,7 @@ const BlogDetails: React.FC = () => {
           id: post.id,
           title: post.title,
           description: post.description,
-          tagName: post.tag.name,
+          tagName: post.tag,
         },
       });
     }
@@ -215,9 +215,9 @@ const BlogDetails: React.FC = () => {
           <>
             <h1 className="text-2xl font-bold text-gray-800">{post.title}</h1>
             <p className="mt-4 text-gray-700">{post.description}</p>
-            {post.tag && (
-              <p className="mt-2 text-sm text-gray-500">#{post.tag.name}</p>
-            )}
+            
+            <p className="mt-2 text-sm text-gray-500">Tag: {post.tag}</p>
+            
             <div className="mt-4 flex space-x-4">
               <button
                 className="text-blue-500 hover:underline mb-4"

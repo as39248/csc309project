@@ -6,7 +6,7 @@ interface Post {
   id: number;
   title: string;
   description: string;
-  tag: { name: string };
+  tag: string;
   upvotes: number;
   downvotes: number;
 }
@@ -52,7 +52,7 @@ const EditPostPage: React.FC = () => {
         body: JSON.stringify({
           editTitle: updatedPost.title,
           editDescription: updatedPost.description,
-          tagName: updatedPost.tagName,
+          editTag: updatedPost.tagName,
         }),
       });
 
@@ -65,27 +65,25 @@ const EditPostPage: React.FC = () => {
     }
   };
 
+  const handleEditCancel = () => {
+    router.push(`/blog/${id}`);
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full max-w-3xl p-6 bg-white rounded shadow mt-8">
-        {/* Cancel Button */}
-        <button
-          onClick={() => router.push(`/blog/${id}`)}
-          className="text-blue-500 hover:underline mb-4"
-        >
-          Cancel
-        </button>
-
         {post ? (
           <EditPost
             post={{
               id: post.id,
               title: post.title,
               description: post.description,
-              tagName: post.tag.name,
+              tagName: post.tag,
             }}
             onSubmit={handleEditSubmit}
+            onCancel={handleEditCancel}
           />
         ) : error ? (
           <p className="text-red-500">{error}</p>
