@@ -85,7 +85,7 @@ const TemplatePage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h2 className="text-3xl font-semibold text-center mb-6">Search for Templates</h2>
+      <h2 className="text-3xl font-semibold text-center mb-6 text-black">Search for Templates</h2>
       {/* Search Bar */}
       <div className="w-full max-w-md">
         <SearchBar onSearch={handleSearch} />

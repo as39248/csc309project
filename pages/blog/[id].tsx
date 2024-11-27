@@ -185,6 +185,20 @@ const BlogDetails: React.FC = () => {
     }
   };
 
+  const handleEditPost = () => {
+    if (post) {
+      router.push({
+        pathname: `/editPost`,
+        query: {
+          id: post.id,
+          title: post.title,
+          description: post.description,
+          tagName: post.tag.name,
+        },
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full max-w-3xl p-6 bg-white rounded shadow mt-8">
@@ -195,6 +209,7 @@ const BlogDetails: React.FC = () => {
         >
           Back to Results
         </button>
+        
 
         {post ? (
           <>
@@ -203,6 +218,14 @@ const BlogDetails: React.FC = () => {
             {post.tag && (
               <p className="mt-2 text-sm text-gray-500">#{post.tag.name}</p>
             )}
+            <div className="mt-4 flex space-x-4">
+              <button
+                className="text-blue-500 hover:underline mb-4"
+                onClick={() => handleEditPost()}
+              >
+                Edit
+              </button>
+            </div>
             <div className="mt-4 flex space-x-4">
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -223,16 +246,18 @@ const BlogDetails: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-800">Comments</h2>
               {comments.length > 0 ? (
                 <ul className="mt-4 space-y-4">
-                  {comments.map((comment) => (
-                    <li
-                      key={comment.id}
-                      className="p-4 bg-gray-100 rounded shadow"
-                    >
-                      <div>
-                        <strong className="text-black">
-                          {comment.user.firstName} {comment.user.lastName}
-                        </strong>
-                      </div>
+                  {comments
+                    .filter((comment) => comment.parentId === null) 
+                    .map((comment) => (
+                      <li
+                        key={comment.id}
+                        className="p-4 bg-gray-100 rounded shadow"
+                      >
+                        <div>
+                          <strong className="text-black">
+                            {comment.user.firstName} {comment.user.lastName}
+                          </strong>
+                        </div>
                       <p className="text-gray-700">{comment.content}</p>
                       <div className="flex space-x-4 mt-2">
                         <button

@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
 	} else if (req.method === "POST"){
 		
-		const { action, editTitle, editDescription } = req.body;
+		const { action, editTitle, editDescription, editTag } = req.body;
 
 		const userCheck = verifyToken(req.headers.authorization);
 		if (!userCheck) {
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
             }
 
         // edit the post
-        } else if (editTitle || editDescription) {
+        } else if (editTitle || editDescription || editTag) {
            
             try {
             	const post = await prisma.post.findUnique({
@@ -121,6 +121,10 @@ export default async function handler(req, res) {
                 if (editDescription) {
                     data.description = editDescription;
                 }
+
+                if (editTag) {
+                    data.tag.name = editTag;
+                }  
 
                 const editPost = await prisma.post.update({
                     where: {
