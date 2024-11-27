@@ -200,7 +200,7 @@ const SelectedTemplate: React.FC = () => {
               <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.code}</p>
 
               {selectedTemplate.tags && (
-                <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tags}</p>
+                <p className="mt-2 text-sm text-gray-500"></p>
               )}
             </>
           ) : (
