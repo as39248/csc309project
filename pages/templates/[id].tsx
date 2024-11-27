@@ -72,6 +72,7 @@ const SelectedTemplate: React.FC = () => {
     const handleForkTemplate = async (id:number) => {
       try {
         const token = localStorage.getItem("accessToken");
+        if (!token) throw new Error("Unauthorized");
         const Forked = true;
 
         const rep = await fetch(`/api/templates/${id}`);

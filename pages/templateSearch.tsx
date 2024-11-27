@@ -8,7 +8,6 @@ interface Template {
   explanation: string;
   tag: string;
   code: string;
-  userId: number;
 }
 
 const TemplatePage: React.FC = () => {
