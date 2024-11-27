@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Link href="/blogs">Blogs</Link>
         <Link href="/templateSearch">Templates</Link>
         <Link href="/profile">Profile</Link>
-        <Link href="/Theme">Change Theme</Link>
+        <Link href="/Theme">Theme</Link>
         <div className="flex-1" />
         {/* <Link href="/logout">Logout</Link> */}
       </nav>
