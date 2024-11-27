@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <Link href="/">Home</Link>
         <Link href="/IDE">IDE</Link>
         <Link href="/Blogs">Blogs</Link>
-        <Link href="/Templates">Templates</Link>
-        <Link href="/Profile">Profile</Link>
+        <Link href="/templateSearch">Templates</Link>
+        <Link href="/profile">Profile</Link>
         <Link href="/Theme">Change Theme</Link>
         <div className="flex-1" />
         {/* <Link href="/logout">Logout</Link> */}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'; // For redirecting after successful sign-up
+import { useRouter } from 'next/router';
 
 interface SignUpFormData {
   firstName: string;
@@ -48,7 +48,6 @@ const SignUpPage: React.FC = () => {
     e.preventDefault();
     const { firstName, lastName, phoneNumber, email, password, confirmPassword, avatar } = formData;
 
-    // Basic validation
     if (!firstName || !lastName || !phoneNumber || !email || !password || !confirmPassword || !avatar) {
       setErrorMessage('All fields are required.');
       return;
@@ -86,7 +85,7 @@ const SignUpPage: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Redirect to login page after successful sign-up
+        // Redirect to login page
         router.push('/login');
       } else {
         setErrorMessage(data.message || 'Sign-up failed.');
