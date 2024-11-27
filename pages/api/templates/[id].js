@@ -8,11 +8,12 @@ export default async function handler(req, res) {
         const user = verifyToken(req.headers.authorization);
 
         if  (!user){
+            console.log("unauthorized");
             return res.status(401).json({message: "Unauthorized",});
         }
 
-        const {id} = req.query;
-        const {title, explanation, tags, code} = req.body;
+        const {id, title, explanation, tags, code} = req.query;
+        // const {} = req.body;
         
         // Store the data that needs to be updated
         let updatedData = {};
