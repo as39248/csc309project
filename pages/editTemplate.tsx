@@ -49,7 +49,7 @@ const EditTemplatePage: React.FC = () => {
       }
 
       const response = await fetch(`/api/templates/${id}`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
