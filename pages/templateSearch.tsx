@@ -16,6 +16,7 @@ const TemplatePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [results, setResults] = useState<Template[]>([]); 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null); 
+  const router = useRouter();
 
   const handleSearch = async ({ title, explanation, tag, code, skip }: { title?: string; explanation?: string; tag?: string; code?: string; skip?: number, }) => {
     try {
@@ -35,6 +36,7 @@ const TemplatePage: React.FC = () => {
         console.log(data.error);
         throw new Error("Failed to fetch results.");
       }
+      setResults(data);
       
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -42,15 +44,9 @@ const TemplatePage: React.FC = () => {
     }
   };
 
-  
-
-  
-
   const handleTemplateClick = (id: number) => {
-    fetchTemplate(id); 
+    router.push(`/templates/${id}`);
   };
-
-  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
