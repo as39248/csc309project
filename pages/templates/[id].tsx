@@ -25,31 +25,31 @@ const SelectedTemplate: React.FC = () => {
     }, [id]);
 
     const handleDeleteTemplate = async (id: number) => {
-        try {
-          const token = localStorage.getItem("accessToken");
-          if (!token){ 
-            setErrorMessage("Unauthorized");
-            return;
-          }
-          console.log(token);
-          const response = await fetch(`/api/templates/${id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-    
-          if (!response.ok) {
-            setErrorMessage("Failed to delete template");
-            return;
-          }
-          else{
-            setSelectedTemplate(null); 
-          }   
-        } catch (err) {
-          console.error("Error deleting post:", err);
-          setErrorMessage("Failed to delete template.");
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token){ 
+          setErrorMessage("Unauthorized");
+          return;
         }
+        console.log(token);
+        const response = await fetch(`/api/templates/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          setErrorMessage("Failed to delete template");
+          return;
+        }
+        else{
+          setSelectedTemplate(null); 
+        }   
+      } catch (err) {
+        console.error("Error deleting post:", err);
+        setErrorMessage("Failed to delete template.");
+      }
     };
 
     const handleBackToResults = () => {

@@ -66,7 +66,7 @@ export default async function handler(req, res) {
                 },
             });
 
-            if (templateExists && user.userId != templateExists.id){
+            if (templateExists && user.userId != templateExists.userId){
                 return res.status(401).json({message: "Unauthorized to delete this template.",});
             }
             // Delete a specific template
