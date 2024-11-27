@@ -4,11 +4,7 @@ export JWT_SECRET = "dfoaiefnoi2312313";
 export JWT_EXPIRES_IN = "1h";
 
 # install needed dependencies
-npm install next
-npm install prisma
-npm install bcrypt
-npm install next
-npm install jsonwebtoken
+npm install
 
 # migrate prisma
 npx prisma migrate dev --name init

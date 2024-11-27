@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Link href="/profile">Profile</Link>
         <Link href="/Theme">Theme</Link>
         <div className="flex-1" />
-        {/* <Link href="/logout">Logout</Link> */}
+        <Link href="/logout">Logout</Link>
       </nav>
       <Component {...pageProps} /> {/* Render the page component */}
     </>

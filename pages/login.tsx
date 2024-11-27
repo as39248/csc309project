@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
         localStorage.setItem("accessToken", data.accessToken); // For the current session
         localStorage.setItem("refreshToken", data.refreshToken);
 
-        router.push("/ide"); // Redirect to dashboard or another page
+        router.push("/loginSuccess"); // Redirect to dashboard or another page
       } else {
         // Handle error from backend (e.g., wrong credentials)
         setErrorMessage(data.message || "Login failed.");
