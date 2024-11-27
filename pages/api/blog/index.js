@@ -40,6 +40,12 @@ export default async function handler(req, res) {
       where: whereClause.AND.length > 0 ? whereClause : undefined,
       include: {
         templates: true,
+        user: {
+        	select: {
+        		firstName: true,
+        		lastName: true,
+        	},
+        },
       },
     });
     

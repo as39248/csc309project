@@ -215,7 +215,7 @@ const BlogDetails: React.FC = () => {
         {post ? (
           <>
             <h1 className="text-4xl font-bold text-gray-800">{post.title}</h1>
-            <p className="mt-2 text-xs text-gray-400 md-3">Author: {post.user.firstName} {post.user.lastName}</p>
+            <p className="mt-2 text-xs text-gray-400 md-3">By {post.user.firstName} {post.user.lastName}</p>
             <p className="mt-4 text-md text-gray-700">{post.description}</p>
             <p className="mt-2 text-sm text-gray-600">Tag: {post.tag}</p>
             

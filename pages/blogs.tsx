@@ -6,6 +6,7 @@ interface Post {
   id: number;
   title: string;
   description: string;
+  user: { firstName: string; lastName: string };
   tag: { name: string };
   upvotes: number;
   downvotes: number;
@@ -94,7 +95,10 @@ const Blogs: React.FC = () => {
                 <h2 className="text-lg font-bold text-blue-500 hover:underline">
                   {post.title}
                 </h2>
-                <p className="text-gray-500 text-sm mt-1">
+                <p className="text-gray-500 text-xs mt-0">
+                  By {post.user.firstName} {post.user.lastName}
+                </p>
+                <p className="text-gray-700 text-sm mt-3">
                   {post.upvotes} Upvotes | {post.downvotes} Downvotes
                 </p>
               </li>
