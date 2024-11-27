@@ -17,13 +17,6 @@ export default async function handler(req, res) {
                 return res.status(400).json({message: "Missing required fields for creating templates."});
             }
             
-            // Sort tags based on whether they already exist or not
-        //    const connectTags = tags.map((tag)=> {
-        //         return {
-        //             where: {name: tag},
-        //             create: {name: tag}
-        //         };
-        //     } );
             // Create a new template
             const newTemplate = await prisma.template.create({
                 data: {
@@ -34,7 +27,6 @@ export default async function handler(req, res) {
                     code: code,
                     isForked: isForked,
                 },
-                include: {tags:true},
             });
             return res.status(201).json(newTemplate);
         }catch(error){
@@ -76,7 +68,6 @@ export default async function handler(req, res) {
                 take: Number(take) || 10,
                 skip: Number(skip) || 0,
                 where: whereClause.AND.length > 0 ? whereClause : undefined,
-                include: {tags: true},
             });
 
             return res.status(200).json(templates);

@@ -26,12 +26,6 @@ export default async function handler(req, res) {
         }
         
         if (tags) {
-            // const connectTags = tags.map((tag)=> {
-            //             return {
-            //                 where: {name: tag},
-            //                 create: {name: tag}
-            //             };
-            //         } );
             updatedData.tags = tags;
         }
         
@@ -61,11 +55,20 @@ export default async function handler(req, res) {
         
         const {id} = req.query;
         
-			if (!id){
-				return res.status(401).json({message: "Template unspecified.",});
-			}        
+        if (!id){
+            return res.status(401).json({message: "Template unspecified.",});
+        }        
         
         try {
+            const templateExists = await prisma.template.findUnique({
+                where: {
+                    id: Number(id),
+                },
+            });
+
+            if (templateExists && user.userId != templateExists.id){
+                return res.status(401).json({message: "Unauthorized to delete this template.",});
+            }
             // Delete a specific template
            const isTemplateDeleted = await prisma.template.delete({
             where: {
