@@ -33,7 +33,8 @@ const TemplatePage: React.FC = () => {
 
       if (!response.ok) {
         console.log(data.error);
-        throw new Error("Failed to fetch results.");
+        setErrorMessage("Failed to fetch results.");
+        return;
       }
       setResults(data);
       

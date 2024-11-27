@@ -27,6 +27,10 @@ const SelectedTemplate: React.FC = () => {
     const handleDeleteTemplate = async (id: number) => {
         try {
           const token = localStorage.getItem("accessToken");
+          if (!token){ 
+            setErrorMessage("Unauthorized");
+            return;
+          }
           console.log(token);
           const response = await fetch(`/api/templates/${id}`, {
             method: "DELETE",
@@ -36,11 +40,12 @@ const SelectedTemplate: React.FC = () => {
           });
     
           if (!response.ok) {
-            throw new Error("Failed to delete template");
+            setErrorMessage("Failed to delete template");
+            return;
           }
-    
-          
-          setSelectedTemplate(null); 
+          else{
+            setSelectedTemplate(null); 
+          }   
         } catch (err) {
           console.error("Error deleting post:", err);
           setErrorMessage("Failed to delete template.");
@@ -56,15 +61,21 @@ const SelectedTemplate: React.FC = () => {
         try {
           const response = await fetch(`/api/templates/${id}`);
 
-          if (!response.ok) throw new Error("Failed to fetch template.");
+          if (!response.ok) {
+            setErrorMessage("Failed to fetch template."); 
+            return;
+          }
 
-          const template: Template = await response.json();
+          else{
+            const template = await response.json();
 
-          setSelectedTemplate(template); 
+            setSelectedTemplate(template); 
 
-          setErrorMessage("");
+            setErrorMessage("");
+
+          }
         } catch (err) {
-          console.error("Error fetching post:", err);
+          console.error("Error fetching template:", err);
           setErrorMessage("Failed to fetch template.");
         }
     };
@@ -72,12 +83,18 @@ const SelectedTemplate: React.FC = () => {
     const handleForkTemplate = async (id:number) => {
       try {
         const token = localStorage.getItem("accessToken");
-        if (!token) throw new Error("Unauthorized");
+        if (!token) {
+          setErrorMessage("Unauthorized");
+          return;
+        }
         const Forked = true;
 
         const rep = await fetch(`/api/templates/${id}`);
 
-        if (!rep.ok) throw new Error("Failed to fetch template for forking.");
+        if (!rep.ok) {
+          setErrorMessage("Failed to fetch template for forking.");
+          return;
+        }
 
         const data1 = await rep.json();
 
@@ -93,7 +110,8 @@ const SelectedTemplate: React.FC = () => {
         });
   
         if (!response.ok) {
-          throw new Error("Failed to fork template");
+          setErrorMessage("Failed to fork template");
+          return;
         }
         const data2 = await response.json();
         router.push(`/templates/${data2.id}`);

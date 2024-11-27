@@ -27,7 +27,10 @@ const EditTemplatePage: React.FC = () => {
   const fetchTemplate = async (templateId: string) => {
     try {
       const response = await fetch(`/api/templates/${templateId}`);
-      if (!response.ok) throw new Error("Failed to fetch template");
+      if (!response.ok) {
+        setError("Failed to fetch template");
+        return;
+      }
       const data: Template = await response.json();
       setTemplate(data);
       setError(null);
@@ -40,7 +43,10 @@ const EditTemplatePage: React.FC = () => {
   const handleEditSubmit = async (updatedTemplate: { title: string; explanation: string; tag: string, code:string }) => {
     try {
       const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("Unauthorized");
+      if (!token) {
+        setError("Unauthorized");
+        return;
+      }
 
       const response = await fetch(`/api/blog/${id}`, {
         method: "POST",
@@ -56,7 +62,10 @@ const EditTemplatePage: React.FC = () => {
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to update template");
+      if (!response.ok) {
+        setError("Failed to update template");
+        return;
+      }
       const updatedData = await response.json();
       setTemplate(updatedData);
     } catch (err) {
@@ -68,8 +77,6 @@ const EditTemplatePage: React.FC = () => {
   const handleEditCancel = () => {
     router.push(`/templates/${id}`);
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
