@@ -62,12 +62,13 @@ const TemplatePage: React.FC = () => {
           {results.map((template) => (
             <li
               key={template.id}
-              className="p- bg-white rounded shadow cursor-pointer"
+              className="p-6 bg-white rounded shadow cursor-pointer"
               onClick={() => handleTemplateClick(template.id)}
             >
               <h2 className="block hover:underline text-lg font-bold text-blue-500 mb-1">
                 {template.title}
               </h2>
+              <p className='text-grey'>{template.explanation}</p>
             </li>
           ))}
         </ul>

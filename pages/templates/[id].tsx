@@ -188,11 +188,10 @@ const SelectedTemplate: React.FC = () => {
           ) : (
             <p className="text-gray-500">{errorMessage || "No template selected for viewing."}</p>
           )}
-          
+          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
         </div>
       </div>
     );
-
 };
 
 export default SelectedTemplate;
