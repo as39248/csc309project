@@ -33,7 +33,7 @@ const SelectedTemplate: React.FC = () => {
         }
 
         console.log(token);
-        
+
         const response = await fetch(`/api/templates/${id}`, {
           method: "DELETE",
           headers: {
@@ -125,7 +125,18 @@ const SelectedTemplate: React.FC = () => {
     };
 
     const handleUpdateTemplate = async () => {
-      router.push(`/editTemplate`);
+      if (selectedTemplate) {
+      router.push({
+        pathname: `/editPost`,
+        query: {
+          id: selectedTemplate.id,
+          title: selectedTemplate.title,
+          description: selectedTemplate.explanation,
+          tag: selectedTemplate.tag,
+          code: selectedTemplate.code,
+        },
+      });
+    }
     };
 
     return (
