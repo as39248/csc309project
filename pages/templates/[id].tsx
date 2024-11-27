@@ -47,7 +47,7 @@ const SelectedTemplate: React.FC = () => {
     };
 
     const handleBackToResults = () => {
-        router.push("@pages/templateSearch");
+        router.push("/templateSearch");
         setSelectedTemplate(null); 
     };
 
