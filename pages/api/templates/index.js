@@ -18,20 +18,18 @@ export default async function handler(req, res) {
             }
             
             // Sort tags based on whether they already exist or not
-           const connectTags = tags.map((tag)=> {
-                return {
-                    where: {name: tag},
-                    create: {name: tag}
-                };
-            } );
+        //    const connectTags = tags.map((tag)=> {
+        //         return {
+        //             where: {name: tag},
+        //             create: {name: tag}
+        //         };
+        //     } );
             // Create a new template
             const newTemplate = await prisma.template.create({
                 data: {
                     title: title, 
                     explanation: explanation,
-                    tags: {
-                    	connectOrCreate: connectTags,
-                    },
+                    tags: tags,
                     userId: Number(user.userId),
                     code: code,
                     isForked: isForked,
@@ -63,7 +61,7 @@ export default async function handler(req, res) {
             }
         
             if (tag) {
-            whereClause.AND.push({ tag: { name: { contains: tag,  } }});
+            whereClause.AND.push({ tag: { contains: tag,  } });
             }
 
             if (code) {
