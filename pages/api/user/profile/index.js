@@ -3,26 +3,26 @@ import { PrismaClient } from "@prisma/client";
 import { verifyToken } from "../../../../utils/auth";
 
 const prisma = new PrismaClient();
-const avatars = ["@public/avatars/avatar1", "@public/avatars/avatar2", "@public/avatars/stones"];       
+const avatars = ["@public/avatars/avatar1", "@public/avatars/avatar2", "@public/avatars/avatar3"];       
 
 export default async function handler(req, res) {
     if (req.method === 'PATCH'){
         try{
-        		const user = verifyToken(req.headers.authorization);
-        		
-        		if  (!user){
+            const user = verifyToken(req.headers.authorization);
+            
+            if  (!user){
                 return res.status(401).json({message: "Unauthorized"});
             }
             
             
-            const { firstName, lastName, phoneNumber, email, avatar, role} = req.body;
+            const { firstName, lastName, phoneNumber, email, avatar} = req.body;
 
-            if (!firstName && !lastName && !phoneNumber && !email && !avatar && !role) {
+            if (!firstName && !lastName && !phoneNumber && !email && !avatar) {
                 return res.status(400).json({message: "Please provide at least 1 required fields"});
             }
             
             // Don't allow visitors to edit their profile
-            if (role === 'VISITOR'){
+            if (user.role === 'VISITOR'){
                 return res.status(401).json({message: "User is not permitted to make this request."});
             }
 				
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
                 },
             	});
             	if (emailExists) {
-						return res.status(400).json({message: "The given email is already used."});            	
+					return res.status(400).json({message: "The given email is already used."});            	
             	}
                data.email = email;
             }
@@ -54,10 +54,10 @@ export default async function handler(req, res) {
             }
             if (avatar) {
             	if (!avatars.includes(avatar)){
-            	return res.status(400).json({
-                message: "Avatar not included."
-                });
-            }
+                    return res.status(400).json({
+                    message: "Avatar not included."
+                    });
+                }
                 data.avatar = avatar;
             }
             const updatedUser = await prisma.user.update({

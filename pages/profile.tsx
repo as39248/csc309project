@@ -7,18 +7,14 @@ interface SignUpFormData {
   phoneNumber: string;
   avatar: string;
   email: string;
-  password: string;
-  confirmPassword: string;
 }
 
-const SignUpPage: React.FC = () => {
+const ProfilePage: React.FC = () => {
   const [formData, setFormData] = useState<SignUpFormData>({
     firstName: '',
     lastName: '',
     phoneNumber: '',
     email: '',
-    password: '',
-    confirmPassword: '',
     avatar: '',
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -46,25 +42,16 @@ const SignUpPage: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { firstName, lastName, phoneNumber, email, password, confirmPassword, avatar } = formData;
+    const { firstName, lastName, phoneNumber, email, avatar } = formData;
 
-    if (!firstName || !lastName || !phoneNumber || !email || !password || !confirmPassword || !avatar) {
-      setErrorMessage('All fields are required.');
-      return;
-    }
-
-    if (password.length < 8){
-      setErrorMessage('Password must be at least 8 characters long.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+    // Basic validation
+    if (!firstName && !lastName && !phoneNumber && !email && !avatar) {
+      setErrorMessage('At least 1 field is needed to make changes.');
       return;
     }
 
     const patt = /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
-    if (!patt.test(phoneNumber)) {
+    if (phoneNumber && !patt.test(phoneNumber)) {
       setErrorMessage('Phone number is not in a valid form.');
       return;
     }
@@ -73,22 +60,21 @@ const SignUpPage: React.FC = () => {
     setErrorMessage('');
 
     try {
-      let role = 'USER';
-      const response = await fetch('api/user/signup', {
-        method: 'POST', // Send POST request to the backend
+      const response = await fetch('api/user/profile', {
+        method: 'PATCH', 
         headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, password, phoneNumber, email, avatar, role }), // Send the form data as JSON
+        body: JSON.stringify({ firstName, lastName, phoneNumber, email, avatar }), // Send the form data as JSON
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // Redirect to login page
-        router.push('/login');
+        
       } else {
-        setErrorMessage(data.message || 'Sign-up failed.');
+        setErrorMessage(data.message || 'Changing profile failed.');
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
@@ -101,7 +87,7 @@ const SignUpPage: React.FC = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-white dark:bg-gray-900 text-black dark:text-white">
       <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-semibold text-center mb-6">Create an Account</h2>
+        <h2 className="text-3xl font-semibold text-center mb-6">Update Profile</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* First Name */}
           <div className="form-group">
@@ -114,7 +100,7 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your first name"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              
             />
           </div>
 
@@ -129,7 +115,7 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your last name"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              
             />
           </div>
 
@@ -144,7 +130,7 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your phone number"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              
             />
           </div>
 
@@ -159,43 +145,13 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your email"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div className="form-group">
-            <label htmlFor="password" className="block text-lg font-medium mb-2">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Enter your password"
-              className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Confirm Password */}
-          <div className="form-group">
-            <label htmlFor="confirmPassword" className="block text-lg font-medium mb-2">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Confirm your password"
-              className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              
             />
           </div>
 
           {/* Avatar Selection */}
           <div className="form-group">
-            <label className="block text-lg font-medium mb-2">Select Profile Picture</label>
+            <label className="block text-lg font-medium mb-2">Select New Profile Picture</label>
             <div className="avatar-selection flex space-x-4">
               {['/avatars/avatar1.png', '/avatars/avatar2.png', '/avatars/avatar3.png'].map((avatar, index) => (
                 <img
@@ -218,7 +174,7 @@ const SignUpPage: React.FC = () => {
             className="w-full py-3 mt-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none disabled:bg-blue-400"
             disabled={isLoading}
           >
-            {isLoading ? 'Signing Up...' : 'Sign Up'}
+            {isLoading ? 'Updating...' : 'Update'}
           </button>
         </form>
       </div>
@@ -226,4 +182,4 @@ const SignUpPage: React.FC = () => {
   );
 };
 
-export default SignUpPage;
+export default ProfilePage;

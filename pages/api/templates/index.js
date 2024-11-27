@@ -45,50 +45,39 @@ export default async function handler(req, res) {
     }
     else if (req.method === 'GET'){
 
-        const {title, explanation, tags, code, userId, skip, take} = req.query;
-        let tags_obj = [];
-        console.log(tags);
-
-        if (tags) {
-            // Split tags string into an array if it's a comma-separated string
-            const tagsArray = tags.split(',');
-
-            try {
-                // Fetch all tags concurrently using Promise.all
-                const tagPromises = tagsArray.map(tag => {
-                    return prisma.tag.findUnique({
-                        where: { name: tag }
-                    });
-                });
-
-                // Wait for all tag queries to finish
-                const tagResults = await Promise.all(tagPromises);
-
-                // Filter out null or undefined results (in case some tags are not found)
-                tags_obj = tagResults.filter(tag => tag !== null && tag !== undefined);
-
-                console.log(tags_obj);  // Debugging: log the tags found
-
-            } catch (error) {
-                console.error('Error fetching tags:', error);
-                return res.status(500).json({ message: 'Failed to fetch tags.', error: error.message });
-            }
-        }
-
-        let temp = tags_obj.map(tag => tag.id);
-        console.log(temp);
+        const {title, explanation, tag, code, userId, skip, take} = req.query;
+        
         try {
             // search through all templates
+
+            let whereClause = {
+                AND: [],
+            };
+          
+            if (title) {
+            whereClause.AND.push({ title: { contains: title, } });
+            }
+        
+            if (explanation) {
+            whereClause.AND.push({ explanation: { contains: explanation,  } });
+            }
+        
+            if (tag) {
+            whereClause.AND.push({ tag: { name: { contains: tag,  } }});
+            }
+
+            if (code) {
+            whereClause.AND.push({ code: { contains: code,  } });
+            }
+
+            if (userId) {
+            whereClause.AND.push({ userId: {equals: Number(userId)}});
+            }
+
             const templates = await prisma.template.findMany({
                 take: Number(take) || 10,
                 skip: Number(skip) || 0,
-                where:{
-                    title: title ? {contains: title} : undefined,
-                    explanation: explanation ? {contains: explanation} : undefined,
-                    userId: userId ? {equals: Number(userId)} : undefined,
-                    tags: tags_obj.length > 0 ? { some: { id: { in: tags_obj.map(tag => tag.id) } } } : undefined,
-                    code: code ? {contains: code,} : undefined,
-                },
+                where: whereClause.AND.length > 0 ? whereClause : undefined,
                 include: {tags: true},
             });
 

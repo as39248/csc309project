@@ -18,22 +18,22 @@ export default async function handler(req, res) {
         let updatedData = {};
         
         if (title) {
-        		updatedData.title = title;
+            updatedData.title = title;
         }
         
         if (explanation) {
-        		updatedData.explanation = explanation;
+            updatedData.explanation = explanation;
         }
         
         if (tags) {
-        		const connectTags = tags.map((tag)=> {
-                    		return {
-                    			where: {name: tag},
-                    			create: {name: tag}
-                    		};
-                    	} );
-        		updatedData.tags = connectTags;
-        }
+            const connectTags = tags.map((tag)=> {
+                        return {
+                            where: {name: tag},
+                            create: {name: tag}
+                        };
+                    } );
+            updatedData.tags = connectTags;
+    }
         
         if (code) {
         		updatedData.code = code;
