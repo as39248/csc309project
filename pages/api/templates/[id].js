@@ -26,14 +26,14 @@ export default async function handler(req, res) {
         }
         
         if (tags) {
-            const connectTags = tags.map((tag)=> {
-                        return {
-                            where: {name: tag},
-                            create: {name: tag}
-                        };
-                    } );
-            updatedData.tags = connectTags;
-    }
+            // const connectTags = tags.map((tag)=> {
+            //             return {
+            //                 where: {name: tag},
+            //                 create: {name: tag}
+            //             };
+            //         } );
+            updatedData.tags = tags;
+        }
         
         if (code) {
         		updatedData.code = code;

@@ -5,7 +5,7 @@ interface Template {
   id: number,
   title: string;
   explanation: string;
-  tag: { name: string };
+  tag: string;
   code: string;
   userId: number;
 }
@@ -16,7 +16,7 @@ const TemplatePage: React.FC = () => {
   const [results, setResults] = useState<Template[]>([]); 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null); 
 
-  const handleSearch = async ({ title, explanation, tag, code, userId, skip }: { title?: string; explanation?: string; tag?: string; code?: string; userId?: number; skip?: number, }) => {
+  const handleSearch = async ({ title, explanation, tag, code, skip }: { title?: string; explanation?: string; tag?: string; code?: string; skip?: number, }) => {
     try {
       const query = new URLSearchParams();
       if (title) query.append("title", title);
@@ -114,7 +114,7 @@ const TemplatePage: React.FC = () => {
             <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
             <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
             {selectedTemplate.tag && (
-              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag.name}</p>
+              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
             )}
 
 

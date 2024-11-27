@@ -61,7 +61,7 @@ export default async function handler(req, res) {
             }
         
             if (tag) {
-            whereClause.AND.push({ tag: { contains: tag,  } });
+            whereClause.AND.push({ tags: { contains: tag,  } });
             }
 
             if (code) {
