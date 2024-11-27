@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <nav className="flex flex-row bg-blue-900 text-white px-4 py-2 gap-2 flex-wrap">
         <Link href="/">Home</Link>
         <Link href="/IDE">IDE</Link>
-        <Link href="/Blogs">Blogs</Link>
+        <Link href="/blogs">Blogs</Link>
         <Link href="/templateSearch">Templates</Link>
         <Link href="/profile">Profile</Link>
         <Link href="/Theme">Change Theme</Link>

@@ -146,8 +146,10 @@ export default async function handler(req, res) {
 		
 		const userId = userCheck.userId;
 		try {
+            const postId = Number(id);
+            
 			const post = await prisma.post.findUnique({
-                where: { id: Number(id) },
+                where: { id: postId },
             });
 
             if (!post) {
@@ -157,10 +159,21 @@ export default async function handler(req, res) {
             if (post.userId !== userId) {
                 return res.status(403).json({ error: "Forbidden: You are not the owner of this post" });
             }
+
+            await prisma.comment.deleteMany({
+                where: { postId },
+            });
+
+      
+            await prisma.template.deleteMany({
+                where: {
+                    Post: { some: { id: postId } },
+                },
+            });
             
 			await prisma.post.delete({
 			    where: {
-				    id: Number(id),
+				    id: postId
 			    },
 		    });
 		    return res.status(200).json({ message: 'Post Deleted'});
