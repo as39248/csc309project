@@ -127,11 +127,11 @@ const SelectedTemplate: React.FC = () => {
     const handleUpdateTemplate = async () => {
       if (selectedTemplate) {
       router.push({
-        pathname: `/editPost`,
+        pathname: `/editTemplate`,
         query: {
           id: selectedTemplate.id,
           title: selectedTemplate.title,
-          description: selectedTemplate.explanation,
+          explanation: selectedTemplate.explanation,
           tag: selectedTemplate.tag,
           code: selectedTemplate.code,
         },
