@@ -16,12 +16,12 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "GET") {
-        const {skip, take} = req.query
+        // const {skip, take} = req.query
         try{
             // Fetch all comments, sort by the number of reports in descending order
             const comments = await prisma.comment.findMany({
-                take: Number(take) || 10,
-                skip: Number(skip) || 0,
+                // take: Number(take) || 10,
+                // skip: Number(skip) || 0,
                 orderBy: {
                     reports:{
                         _count: 'desc',

@@ -188,7 +188,7 @@ const SelectedTemplate: React.FC = () => {
               {selectedTemplate.isForked ? (
                 <>
                   <div className="mt-1 flex justify-end">
-                    <p className="mt-2 text-black"> This template is forked.</p>
+                    <p className="mt-2 text-red-700"> This template is forked.</p>
                   </div>
                 </>):(
                   <p></p>
@@ -197,7 +197,7 @@ const SelectedTemplate: React.FC = () => {
               <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
               <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
               <p className="mt-2 text-sm text-gray-600">Tags: {selectedTemplate.tags}</p>
-              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.code}</p>
+              <p className="mt-2 text-sm text-gray-500">{selectedTemplate.code}</p>
 
               {selectedTemplate.tags && (
                 <p className="mt-2 text-sm text-gray-500"></p>

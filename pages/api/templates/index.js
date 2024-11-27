@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     }
     else if (req.method === 'GET'){
 
-        const {title, explanation, tag, code, userId, skip, take} = req.query;
+        const {title, explanation, tag, code, userId} = req.query;
         
         try {
             // search through all templates
@@ -65,8 +65,8 @@ export default async function handler(req, res) {
             }
 
             const templates = await prisma.template.findMany({
-                take: Number(take) || 10,
-                skip: Number(skip) || 0,
+                // take: Number(take) || 10,
+                // skip: Number(skip) || 0,
                 where: whereClause.AND.length > 0 ? whereClause : undefined,
             });
 
