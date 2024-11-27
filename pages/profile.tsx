@@ -19,10 +19,11 @@ const ProfilePage: React.FC = () => {
   });
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPopup, setShowPopup] = useState<boolean>(false); 
+  const [popupMessage, setPopupMessage] = useState<string>('');
 
-  const router = useRouter(); // Router to redirect after sign-up
+  const router = useRouter();
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -31,7 +32,6 @@ const ProfilePage: React.FC = () => {
     }));
   };
 
-  // Handle avatar selection
   const handleAvatarSelection = (avatar: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -39,19 +39,17 @@ const ProfilePage: React.FC = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { firstName, lastName, phoneNumber, email, avatar } = formData;
 
-    // Basic validation
     if (!firstName && !lastName && !phoneNumber && !email && !avatar) {
       setErrorMessage('At least 1 field is needed to make changes.');
       return;
     }
 
-    const patt = /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
-    if (phoneNumber && !patt.test(phoneNumber)) {
+    const phonePattern = /^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+    if (phoneNumber && !phonePattern.test(phoneNumber)) {
       setErrorMessage('Phone number is not in a valid form.');
       return;
     }
@@ -61,27 +59,32 @@ const ProfilePage: React.FC = () => {
 
     try {
       const response = await fetch('api/user/profile', {
-        method: 'PATCH', 
+        method: 'PATCH',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+          Authorization: 'Bearer ' + localStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, phoneNumber, email, avatar }), // Send the form data as JSON
+        body: JSON.stringify({ firstName, lastName, phoneNumber, email, avatar }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        
+        setPopupMessage('Profile updated successfully!');
+        setShowPopup(true); 
       } else {
         setErrorMessage(data.message || 'Changing profile failed.');
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -91,7 +94,9 @@ const ProfilePage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* First Name */}
           <div className="form-group">
-            <label htmlFor="firstName" className="block text-lg font-medium mb-2">First Name</label>
+            <label htmlFor="firstName" className="block text-lg font-medium mb-2">
+              First Name
+            </label>
             <input
               type="text"
               id="firstName"
@@ -100,13 +105,14 @@ const ProfilePage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your first name"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              
             />
           </div>
 
           {/* Last Name */}
           <div className="form-group">
-            <label htmlFor="lastName" className="block text-lg font-medium mb-2">Last Name</label>
+            <label htmlFor="lastName" className="block text-lg font-medium mb-2">
+              Last Name
+            </label>
             <input
               type="text"
               id="lastName"
@@ -115,13 +121,14 @@ const ProfilePage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your last name"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              
             />
           </div>
 
           {/* Phone Number */}
           <div className="form-group">
-            <label htmlFor="phoneNumber" className="block text-lg font-medium mb-2">Phone Number</label>
+            <label htmlFor="phoneNumber" className="block text-lg font-medium mb-2">
+              Phone Number
+            </label>
             <input
               type="tel"
               id="phoneNumber"
@@ -130,13 +137,14 @@ const ProfilePage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your phone number"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              
             />
           </div>
 
           {/* Email */}
           <div className="form-group">
-            <label htmlFor="email" className="block text-lg font-medium mb-2">Email</label>
+            <label htmlFor="email" className="block text-lg font-medium mb-2">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -145,7 +153,6 @@ const ProfilePage: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Enter your email"
               className="w-full p-4 border border-gray-300 rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              
             />
           </div>
 
@@ -153,15 +160,19 @@ const ProfilePage: React.FC = () => {
           <div className="form-group">
             <label className="block text-lg font-medium mb-2">Select New Profile Picture</label>
             <div className="avatar-selection flex space-x-4">
-              {['/avatars/avatar1.png', '/avatars/avatar2.png', '/avatars/avatar3.png'].map((avatar, index) => (
-                <img
-                  key={index}
-                  src={avatar}
-                  alt={`Avatar ${index + 1}`}
-                  className={`w-24 h-24 rounded-full cursor-pointer transition-all duration-300 transform ${formData.avatar === avatar ? 'ring-4 ring-blue-500' : 'hover:ring-2 hover:ring-gray-300'}`}
-                  onClick={() => handleAvatarSelection(avatar)}
-                />
-              ))}
+              {['/avatars/avatar1.png', '/avatars/avatar2.png', '/avatars/avatar3.png'].map(
+                (avatar, index) => (
+                  <img
+                    key={index}
+                    src={avatar}
+                    alt={`Avatar ${index + 1}`}
+                    className={`w-24 h-24 rounded-full cursor-pointer transition-all duration-300 transform ${
+                      formData.avatar === avatar ? 'ring-4 ring-blue-500' : 'hover:ring-2 hover:ring-gray-300'
+                    }`}
+                    onClick={() => handleAvatarSelection(avatar)}
+                  />
+                )
+              )}
             </div>
           </div>
 
@@ -178,6 +189,22 @@ const ProfilePage: React.FC = () => {
           </button>
         </form>
       </div>
+
+      {/* Success Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg text-center">
+            <h2 className="text-lg font-bold mb-4">Success</h2>
+            <p className="mb-6">{popupMessage}</p>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
