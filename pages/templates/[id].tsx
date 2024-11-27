@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 
 interface Template {
@@ -69,31 +69,40 @@ const SelectedTemplate: React.FC = () => {
     };
 
     return (
-        <div className="mt-8 w-full max-w-3xl">
-        
-          <div className="p-6 bg-white rounded shadow">
-            <button
-              onClick={handleBackToResults}
-              className="text-blue-500 hover:underline mb-4"
-            >
-              Back to Results
-            </button>
-            {/* Delete Button */}
-            <div className="mt-1 flex justify-end">
-              <button
-                onClick={() => handleDeleteTemplate(selectedTemplate.id)}
-                className="bg-gray-100 text-red-600 border border-gray-400 px-4 py-2 rounded hover:bg-red-600 hover:text-gray-100 focus:outline-none"
-              >
-                Delete Template
-              </button>
-            </div>
-            <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
-            <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
-            {selectedTemplate.tag && (
-              <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
-            )}
-          </div>
+      <div className="mt-8 w-full max-w-3xl">
+      
+        <div className="p-6 bg-white rounded shadow">
+          <button
+            onClick={handleBackToResults}
+            className="text-blue-500 hover:underline mb-4"
+          >
+            Back to Results
+          </button>
+                    
+          {selectedTemplate ? (
+            <>
+              {/* Delete Button */}
+              <div className="mt-1 flex justify-end">
+                <button
+                  onClick={() => handleDeleteTemplate(selectedTemplate.id)}
+                  className="bg-gray-100 text-red-600 border border-gray-400 px-4 py-2 rounded hover:bg-red-600 hover:text-gray-100 focus:outline-none"
+                >
+                  Delete Template
+                </button>
+              </div>
+
+              <h1 className="text-2xl text-gray-700 font-bold">{selectedTemplate.title}</h1>
+              <p className="mt-4 text-gray-700">{selectedTemplate.explanation}</p>
+              {selectedTemplate.tag && (
+                <p className="mt-2 text-sm text-gray-500">#{selectedTemplate.tag}</p>
+              )}
+            </>
+          ) : (
+            <p className="text-gray-500">{"No template selected for viewing."}</p>
+          )}
+          
         </div>
+      </div>
     );
 
 };

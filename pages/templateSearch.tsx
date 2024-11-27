@@ -57,22 +57,23 @@ const TemplatePage: React.FC = () => {
       </div>
 
       {/* Results or Post Details */}
-      
-      <ul className="mt-4 space-y-4">
-        {results.map((template) => (
-          <li
-            key={template.id}
-            className="p- bg-white rounded shadow cursor-pointer"
-            onClick={() => handleTemplateClick(template.id)}
-          >
-            <h2 className="block hover:underline text-lg font-bold text-blue-500 mb-1">
-              {template.title}
-            </h2>
-          </li>
-        ))}
-      </ul>
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+      <div className='mt-8 w-full max-w-3xl'>
+        <ul className="mt-4 space-y-4">
+          {results.map((template) => (
+            <li
+              key={template.id}
+              className="p- bg-white rounded shadow cursor-pointer"
+              onClick={() => handleTemplateClick(template.id)}
+            >
+              <h2 className="block hover:underline text-lg font-bold text-blue-500 mb-1">
+                {template.title}
+              </h2>
+            </li>
+          ))}
+        </ul>
       </div>
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+    </div>
   );
 };
 
