@@ -17,6 +17,7 @@ export default async function handler(req, res) {
                 return res.status(400).json({message: "Missing required fields for creating templates."});
             }
             
+            console.log({"isForked value": isForked});
             // Create a new template
             const newTemplate = await prisma.template.create({
                 data: {
@@ -65,8 +66,6 @@ export default async function handler(req, res) {
             }
 
             const templates = await prisma.template.findMany({
-                // take: Number(take) || 10,
-                // skip: Number(skip) || 0,
                 where: whereClause.AND.length > 0 ? whereClause : undefined,
             });
 

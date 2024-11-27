@@ -17,14 +17,13 @@ const TemplatePage: React.FC = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null); 
   const router = useRouter();
 
-  const handleSearch = async ({ title, explanation, tags, code, skip }: { title?: string; explanation?: string; tags?: string; code?: string; skip?: number, }) => {
+  const handleSearch = async ({ title, explanation, tags, code}: { title?: string; explanation?: string; tags?: string; code?: string }) => {
     try {
       const query = new URLSearchParams();
       if (title) query.append("title", title);
       if (explanation) query.append("explanation", explanation);
       if (tags) query.append("tags", tags);
       if (code) query.append("code", code);
-      // if (skip) query.append("skip", skip);
 
       const response = await fetch(`/api/templates?${query.toString()}`);
 
