@@ -38,7 +38,12 @@ const EditPostPage: React.FC = () => {
     }
   };
 
-  const handleEditSubmit = async (updatedPost: { title: string; description: string; tagName: string }) => {
+  const handleEditSubmit = async (updatedPost: {
+    title: string;
+    description: string;
+    tagName: string;
+    templates?: string[];
+  }) => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("Unauthorized");
@@ -53,6 +58,7 @@ const EditPostPage: React.FC = () => {
           editTitle: updatedPost.title,
           editDescription: updatedPost.description,
           editTag: updatedPost.tagName,
+          editTemplate: updatedPost.templates, // Pass updated templates
         }),
       });
 
@@ -64,6 +70,7 @@ const EditPostPage: React.FC = () => {
       setError("Failed to update post.");
     }
   };
+
 
   const handleEditCancel = () => {
     router.push(`/blog/${id}`);
@@ -81,6 +88,7 @@ const EditPostPage: React.FC = () => {
               title: post.title,
               description: post.description,
               tagName: post.tag,
+              templates: post.templates || [],
             }}
             onSubmit={handleEditSubmit}
             onCancel={handleEditCancel}

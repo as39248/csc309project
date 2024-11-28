@@ -150,7 +150,7 @@ const SelectedTemplate: React.FC = () => {
             Back to Results
           </button>
 
-          <p className="mt-2 text-gray-300">*Only the owner of the template can update and delete it</p>
+          <p className="mt-2 text-red-600">*Only the owner of the template can update and delete it</p>
                     
           {selectedTemplate ? (
             <>

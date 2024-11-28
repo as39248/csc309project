@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
 	} else if (req.method === "POST"){
 		
-		const { action, editTitle, editDescription, editTag } = req.body;
+		const { action, editTitle, editDescription, editTag, editTemplate } = req.body;
 
 		const userCheck = verifyToken(req.headers.authorization);
 		if (!userCheck) {
@@ -104,7 +104,7 @@ export default async function handler(req, res) {
             }
 
         // edit the post
-        } else if (editTitle || editDescription || editTag) {
+        } else if (editTitle || editDescription || editTag || editTemplate) {
            
             try {
             	const post = await prisma.post.findUnique({
@@ -132,6 +132,20 @@ export default async function handler(req, res) {
                 if (editTag) {
                     data.tag = editTag;
                 }  
+                if (editTemplates) {
+            // Fetch template IDs based on titles or use IDs directly
+                    const templatesToConnect = await prisma.template.findMany({
+                        where: { id: { in: editTemplates.map(Number) } },
+                    });
+
+            // Ensure valid template IDs are passed
+                    const validTemplateIds = templatesToConnect.map((template) => template.id);
+
+                     data.templates = {
+                        set: [], // Clear existing templates
+                        connect: validTemplateIds.map((id) => ({ id })), // Connect the new templates
+                    };
+                }
 
                 const editPost = await prisma.post.update({
                     where: {
