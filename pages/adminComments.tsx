@@ -19,40 +19,41 @@ const AdminCommentPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-        fetchComments();
+      fetchComments();
   },[]);
 
   const handleCommentVisibility = async (postId: number, isHidden: boolean) => {
+    let isHiddenValue = isHidden;
+    if (typeof(isHidden) !== 'boolean'){
+      isHiddenValue = false;
+    }
     setErrorMessage("");
     const token = localStorage.getItem("accessToken");
     if (!token) {
-        setErrorMessage("Unauthorized. Only admin are allowed.");
-        return;
+      setErrorMessage("Unauthorized. Only admin are allowed.");
+      return;
     }
 
-    const response = await fetch(`/api/admin/comments`, {
+    const response = await fetch(`/api/admin/comments/comments`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, isHidden}),
+        body: JSON.stringify({ postId, isHiddenValue}),
     });
-
+    const data = await response.json();
     if (!response.ok) {
-      setErrorMessage("Failed to fetch comments.");
+      setErrorMessage(data.message || "Failed to fetch comments.");
       return;
     }
 
-    const data = await response.json();
-
-    if (isHidden){
+    if (isHiddenValue === true){
         setErrorMessage("Comment is now visible");
     }
     else{
         setErrorMessage("Comment is now hidden");
     }
-    
 };
 
   const fetchComments = async () => {
@@ -86,7 +87,7 @@ const AdminCommentPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100">
       <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Comments</h2>
-      <h3 className='text-center mb-6 text-black'>Comments are listed from most contrversial to least controversial</h3>
+      <h3 className='text-center mb-6 text-black'>Comments are listed from most controversial to least controversial</h3>
 
       {/* Results*/}
       <div className="mt-8 w-full max-w-3xl mb-4">

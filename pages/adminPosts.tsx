@@ -28,7 +28,7 @@ const AdminPostPage: React.FC = () => {
             return;
         }
         if (typeof(isHidden) !== 'boolean'){
-            isHiddenValue = false;
+          isHiddenValue = false;
         }
         setErrorMessage("");
         const token = localStorage.getItem("accessToken");
