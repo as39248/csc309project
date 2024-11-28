@@ -22,6 +22,14 @@ const AdminPostPage: React.FC = () => {
   },[]);
 
   const handlePostVisibility = async (postId: number, isHidden: boolean) => {
+        let isHiddenValue = isHidden;
+        if (!postId){
+            setErrorMessage("No post selected.");
+            return;
+        }
+        if (typeof(isHidden) !== 'boolean'){
+            isHiddenValue = false;
+        }
         setErrorMessage("");
         const token = localStorage.getItem("accessToken");
         if (!token) {
@@ -35,7 +43,7 @@ const AdminPostPage: React.FC = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ postId, isHidden}),
+            body: JSON.stringify({ postId, isHiddenValue}),
         });
 
         const data = await response.json();
