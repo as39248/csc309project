@@ -16,13 +16,9 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "GET") {
-        // const {skip, take} = req.query
-    	// Sort posts by the number of reports in descending order
         try{
             // Fetch all posts
             const posts = await prisma.post.findMany({
-                // take: Number(take) || 10,
-                // skip: Number(skip) || 0,
                 orderBy: {
                     reports:{
                         _count: 'desc',
@@ -47,6 +43,8 @@ export default async function handler(req, res) {
             const postExists = await prisma.post.findUnique({
                 where: {id: postId},
             });
+            
+            console.log({"postExists":postExists, "id": postId})
 
             if (!postExists){
                 return res.status(404).json({message: "Comment does not exist."});

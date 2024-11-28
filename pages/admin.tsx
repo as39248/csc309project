@@ -56,7 +56,7 @@ const AdminPage: React.FC = () => {
 
               <Link href="/adminPosts">
                 <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
-                    Look at controverisal comments
+                    Look at controverisal posts
                 </button>
               </Link>
             </div>

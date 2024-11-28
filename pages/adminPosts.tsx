@@ -29,7 +29,7 @@ const AdminPostPage: React.FC = () => {
             return;
         }
 
-        const response = await fetch(`/api/admin/posts`, {
+        const response = await fetch(`/api/admin/posts/posts`, {
             method: "PUT",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ const AdminPostPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100">
       <h2 className="text-3xl font-semibold text-center mb-6 text-black">Controversial Posts</h2>
       <h3 className='text-center mb-6 text-black'>Posts are listed from most controversial to least controversial</h3>
 
