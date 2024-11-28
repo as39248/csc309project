@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 const LoginSuccess: React.FC = () => {
-  const [firstName, setFirstName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserDetails = async () => {

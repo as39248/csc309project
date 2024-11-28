@@ -6,6 +6,7 @@ interface Post {
   title: string;
   description: string;
   tag: string;
+  userId: number;
   user: { firstName: string; lastName: string };
   upvotes: number;
   downvotes: number;
@@ -67,9 +68,14 @@ const BlogDetails: React.FC = () => {
       setError("Failed to fetch comments.");
     }
   };
+
   const showPopupWithMessage = (message: string) => {
     setPopupMessage(message);
     setShowPopup(true);
+  };
+
+  const handleTemplateClick = (templateId: number) => {
+    router.push(`/templates/${templateId}`);
   };
 
   const handleBlogVote = async (action: "upvote" | "downvote") => {
@@ -231,7 +237,7 @@ const BlogDetails: React.FC = () => {
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
     if (post && post.user) {
     
-        if (post.user.id !== userId) {
+        if (post.userId !== userId) {
           showPopupWithMessage("You are not authorized to edit this post.");
           return;
         }
@@ -284,9 +290,30 @@ const BlogDetails: React.FC = () => {
             <h1 className="text-4xl font-bold text-gray-800">{post.title}</h1>
             <p className="mt-2 text-xs text-gray-400 md-3">By {post.user.firstName} {post.user.lastName}</p>
             <p className="mt-4 text-md text-gray-700">{post.description}</p>
-            <p className="mt-2 text-sm text-gray-600">Tag: {post.tag}</p>
             
-            <div className="mt-4 flex space-x-4">
+            {/* Template Buttons */}
+            {post.templates.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <h3 className="text-sm  text-gray-800">
+                  Templates:
+                </h3>
+                {post.templates.map((template) => (
+                  <button
+                    key={template.id}
+                    onClick={() => handleTemplateClick(template.id)}
+                    className="text-blue-500 hover:underline mb-0"
+                  >
+                    {template.title}&nbsp;/&nbsp;
+                  </button>
+                ))}
+              </div>
+            )}
+            <p className="mt-5 text-sm text-gray-600">Tag: {post.tag}</p>
+
+
+
+
+            <div className="mt-8 flex space-x-4">
               <button
                 className="text-blue-500 hover:underline mb-4"
                 onClick={handleEditPost}
@@ -294,7 +321,7 @@ const BlogDetails: React.FC = () => {
                 Edit
               </button>
             </div>
-            <div className="mt-4 flex space-x-4">
+            <div className="mt-0 flex space-x-4">
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 onClick={() => handleBlogVote("upvote")}

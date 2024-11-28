@@ -7,7 +7,7 @@ interface Post {
   title: string;
   description: string;
   user: { firstName: string; lastName: string };
-  tag: { name: string };
+  tag: string;
   upvotes: number;
   downvotes: number;
 }
