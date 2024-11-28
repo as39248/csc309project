@@ -19,7 +19,7 @@ const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
     setContent("");
     setTag("");
     setTemplate("");
-    onSearch({});
+    onSearch({ title: "", content: "", tag: "", template: "" });
   };
 
 
