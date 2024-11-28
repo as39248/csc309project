@@ -63,15 +63,20 @@ const AdminCommentPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`/api/admin/comments/comments`);
-
-        if (!response.ok) {
-          setErrorMessage("Failed to fetch comments.");
-          return;
-        }
+        const response = await fetch(`/api/admin/comments/comments`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         const data = await response.json();
 
+        if (!response.ok) {
+          setErrorMessage(data.message || "Failed to fetch comments.");
+          return;
+        }
         setResults(data);
     }catch(error){
         setErrorMessage("Fetching comments went wrong.");

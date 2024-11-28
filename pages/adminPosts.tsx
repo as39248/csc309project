@@ -57,13 +57,19 @@ const AdminPostPage: React.FC = () => {
   const fetchPosts = async () => {
     try{
         const token = localStorage.getItem("accessToken");
-        
+
         if (!token) {
           setErrorMessage("Unauthorized. Only admin are allowed.");
           return;
         }
 
-        const response = await fetch(`/api/admin/posts/posts`);
+        const response = await fetch(`/api/admin/posts/posts`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+        });
 
         const data = await response.json();
 

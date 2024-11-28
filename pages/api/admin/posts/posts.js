@@ -6,12 +6,12 @@ const prisma = new PrismaClient();
 export default async function handler(req, res) {
     const user = verifyToken(req.headers.authorization);
 
-    if  (!user){
-        return res.status(401).json({message: "Unauthorized.",});
+    if (!user){
+        return res.status(401).json({message: "Unauthorized"});
     }
 	
 	// Only allow admin permission to make requests here
-    if(user.role !== 'ADMIN'){
+    if (user.role !== 'ADMIN'){
         return res.status(401).json({message: "Unauthorized. Admin only.",});
     }
 
