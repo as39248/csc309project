@@ -48,6 +48,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </button>
         )}
         <div className="flex-1" />
+        <Link href="/admin">Admin Only</Link>
         <Link href="/logout">Logout</Link>
       </nav>
       <Component {...pageProps} />
