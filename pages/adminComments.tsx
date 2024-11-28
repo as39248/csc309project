@@ -24,9 +24,9 @@ const AdminCommentPage: React.FC = () => {
 
   const handleCommentVisibility = async (postId: number, isHidden: boolean) => {
     let isHiddenValue = isHidden;
-    if (typeof(isHidden) !== 'boolean'){
-      isHiddenValue = false;
-    }
+    // if (typeof(isHidden) !== 'boolean'){
+    //   isHiddenValue = false;
+    // }
     setErrorMessage("");
     const token = localStorage.getItem("accessToken");
     if (!token) {
