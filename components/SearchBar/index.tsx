@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 interface SearchProps {
-  onSearch: (searchParams: { title?: string; content?: string; tag: string; template?: string }) => void;
+  onSearch: (params: { title?: string; content?: string; tag: string; template?: string }) => void;
 }
 
 const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
@@ -19,7 +19,7 @@ const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
     setContent("");
     setTag("");
     setTemplate("");
-    onSearch({}); // Trigger search with no filters
+    onSearch({});
   };
 
 
