@@ -40,7 +40,7 @@ const AdminCommentPage: React.FC = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, isHiddenValue}),
+        body: JSON.stringify({ postId, isHidden}),
     });
     const data = await response.json();
     if (!response.ok) {
@@ -102,9 +102,6 @@ const AdminCommentPage: React.FC = () => {
                 <h2 className="text-lg font-bold text-blue-500 hover:underline">
                   {comment.content}
                 </h2>
-                <p className="text-gray-500 text-xs mt-0">
-                  By {comment.user.firstName} {comment.user.lastName}
-                </p>
                 <p className="text-gray-700 text-sm mt-3">
                   {comment.upvotes} Upvotes | {comment.downvotes} Downvotes
                 </p>

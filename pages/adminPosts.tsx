@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from "next/router";
-
 interface Post {
     id: number;
     title: string;
@@ -15,7 +13,6 @@ interface Post {
 const AdminPostPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [results, setResults] = useState<Post[]>([]); 
-  const router = useRouter();
 
   useEffect(() => {
     fetchPosts();
@@ -43,7 +40,7 @@ const AdminPostPage: React.FC = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ postId, isHiddenValue}),
+            body: JSON.stringify({ postId, isHidden}),
         });
 
         const data = await response.json();
@@ -98,8 +95,8 @@ const AdminPostPage: React.FC = () => {
       <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Posts</h2>
       <h3 className='text-center mb-6 text-black'>Posts are listed from most controversial to least controversial</h3>
       <p className="text-red-500 mt-4">
-            {errorMessage}
-          </p>
+          {errorMessage}
+      </p>
 
       {/* Results*/}
       <div className="mt-8 w-full max-w-3xl mb-4">
