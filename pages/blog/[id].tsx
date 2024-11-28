@@ -292,7 +292,7 @@ const BlogDetails: React.FC = () => {
             <p className="mt-4 text-md text-gray-700">{post.description}</p>
             
             {/* Template Buttons */}
-            {post.templates.length > 0 && (
+            {post.templates && post.templates.length > 0 && (
               <div className="mt-4 space-y-2">
                 <h3 className="text-sm  text-gray-800">
                   Templates:
