@@ -105,6 +105,10 @@ const AdminCommentPage: React.FC = () => {
                 <p className="text-gray-700 text-sm mt-3">
                   {comment.upvotes} Upvotes | {comment.downvotes} Downvotes
                 </p>
+                <button className="text-red-500 hover:underline" onClick={() =>
+                    handleCommentVisibility(comment.id, comment.isHidden)
+                }>Change Comment Visibility</button>
+                {comment.isHidden && (<p className='text-blue-300 mt-2'>This post is hidden</p>)}
               </li>
             ))}
           </ul>
