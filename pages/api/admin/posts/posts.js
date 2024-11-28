@@ -21,13 +21,23 @@ export default async function handler(req, res) {
         try{
             // Fetch all posts
             const posts = await prisma.post.findMany({
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    tag: true,
+                    user: { select: { firstName: true, lastName: true } },
+                    upvotes: true,
+                    downvotes: true,
+                    isHidden: true,  // Make sure isHidden is included in the response
+                  },
                 orderBy: {
                     reports:{
                         _count: 'desc',
                     }
                 }
             });
-
+            console.log(posts);
             return res.status(200).json(posts);
 
         }catch(error){
