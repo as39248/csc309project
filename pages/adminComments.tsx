@@ -20,7 +20,7 @@ const AdminCommentPage: React.FC = () => {
 
   useEffect(() => {
         fetchComments();
-  },);
+  },[]);
 
   const handleCommentVisibility = async (postId: number, isHidden: boolean) => {
     setErrorMessage("");

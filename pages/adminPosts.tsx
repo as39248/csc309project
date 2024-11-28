@@ -19,7 +19,7 @@ const AdminPostPage: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-},);
+  },[]);
 
   const handlePostVisibility = async (postId: number, isHidden: boolean) => {
         setErrorMessage("");
@@ -114,7 +114,7 @@ const AdminPostPage: React.FC = () => {
                     handlePostVisibility(post.id, post.isHidden)
                 }>Change Post Visibility</button>
 
-                {post.isHidden ? (<p className='text-blue-300 mt-2'>This post is hidden</p>):(<></>)}
+                {post.isHidden && (<p className='text-blue-300 mt-2'>This post is hidden</p>)}
               </li>
               
             ))}
