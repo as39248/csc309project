@@ -35,7 +35,7 @@ model Post {
   id          Int        @id @default(autoincrement())
   title       String
   description String
-  tag         String?        
+  tag         String?
   templates   Template[] @relation("PostTemplates")
   comments    Comment[]  @relation("PostComments")
   upvotes     Int
@@ -70,7 +70,7 @@ model Template {
   id          Int     @id @default(autoincrement())
   title       String
   explanation String?
-  tags        String?   
+  tags        String?
   userId      Int
   user        User    @relation(fields: [userId], references: [id])
   Post        Post[]  @relation("PostTemplates")
