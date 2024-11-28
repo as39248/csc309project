@@ -25,8 +25,7 @@ export default async function handler(req, res) {
                     reports:{
                         _count: 'desc',
                     }
-                },
-                include:{isHidden: true}
+                }
             });
 
             return res.status(200).json(posts);

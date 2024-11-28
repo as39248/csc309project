@@ -88,7 +88,9 @@ const AdminCommentPage: React.FC = () => {
     <div className="flex flex-col items-center min-h-screen bg-gray-100">
       <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Comments</h2>
       <h3 className='text-center mb-6 text-black'>Comments are listed from most controversial to least controversial</h3>
-
+      <p className="text-red-500 mt-4">
+          {errorMessage}
+      </p>
       {/* Results*/}
       <div className="mt-8 w-full max-w-3xl mb-4">
         {results.length > 0 ? (
