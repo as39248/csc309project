@@ -101,8 +101,11 @@ const AdminPostPage: React.FC = () => {
                 <h2 className="text-lg font-bold text-blue-500 hover:underline">
                   {post.title}
                 </h2>
-                <p className="text-gray-500 text-xs mt-0">
+                {/* <p className="text-gray-500 text-xs mt-0">
                   By {post.user.firstName} {post.user.lastName}
+                </p> */}
+                <p className="text-gray-500 text-xs mt-0">
+                   {post.description}
                 </p>
                 <p className="text-gray-700 text-sm mt-3">
                   {post.upvotes} Upvotes | {post.downvotes} Downvotes

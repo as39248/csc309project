@@ -1,24 +1,23 @@
-import exp from "constants";
 import React, { useState, useEffect } from "react";
 
 interface SearchProps {
-  onSearch: (searchParams: { title?: string; explanation?: string; tag?:string, code?: string }) => void;
+  onSearch: (searchParams: { title?: string; explanation?: string; tags?:string, code?: string }) => void;
 }
 
 const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
   const [title, setTitle] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState("");
   const [code, setCode] = useState("");
 
   const handleSearch = () => {
-    onSearch({ title, explanation, tag, code });
+    onSearch({ title, explanation, tags, code });
   };
 
   const handleReset = () => {
     setTitle("");
     setExplanation("");
-    setTag("");
+    setTags("");
     setCode("");
     onSearch({}); // Trigger search with no filters
   };
@@ -55,9 +54,9 @@ const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
       />
       <input
         type="text"
-        placeholder="Search by Tag"
-        value={tag}
-        onChange={(e) => setTag(e.target.value)}
+        placeholder="Search by Tags"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
         onKeyDown={handleKeyDown}
         className="p-2 border border-gray-300 text-black rounded"
       />
