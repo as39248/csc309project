@@ -38,12 +38,12 @@ const AdminPostPage: React.FC = () => {
             body: JSON.stringify({ postId, isHidden}),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-          setErrorMessage("Failed to fetch posts.");
+          setErrorMessage(data.message || "Failed to fetch posts.");
           return;
         }
-
-        const data = await response.json();
 
         if (isHidden){
             setErrorMessage("Post is now visible");
@@ -62,14 +62,14 @@ const AdminPostPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`/api/admin/posts`);
-
-        if (!response.ok) {
-          setErrorMessage("Failed to fetch posts.");
-          return;
-        }
+        const response = await fetch(`/api/admin/posts/posts`);
 
         const data = await response.json();
+
+        if (!response.ok) {
+          setErrorMessage(data.message || "Failed to fetch posts.");
+          return;
+        }
 
         setResults(data);
     }catch(error){
@@ -79,7 +79,7 @@ const AdminPostPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100">
-      <h2 className="text-3xl font-semibold text-center mb-6 text-black">Controversial Posts</h2>
+      <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Posts</h2>
       <h3 className='text-center mb-6 text-black'>Posts are listed from most controversial to least controversial</h3>
 
       {/* Results*/}

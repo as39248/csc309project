@@ -63,7 +63,7 @@ const AdminCommentPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch(`/api/admin/comments`);
+        const response = await fetch(`/api/admin/comments/comments`);
 
         if (!response.ok) {
           setErrorMessage("Failed to fetch comments.");
@@ -79,8 +79,8 @@ const AdminCommentPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h2 className="text-3xl font-semibold text-center mb-6 text-black">Controversial Comments</h2>
+    <div className="flex flex-col items-center min-h-screen bg-gray-100">
+      <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Comments</h2>
       <h3 className='text-center mb-6 text-black'>Comments are listed from most contrversial to least controversial</h3>
 
       {/* Results*/}
