@@ -57,6 +57,7 @@ const AdminPostPage: React.FC = () => {
   const fetchPosts = async () => {
     try{
         const token = localStorage.getItem("accessToken");
+        
         if (!token) {
           setErrorMessage("Unauthorized. Only admin are allowed.");
           return;
