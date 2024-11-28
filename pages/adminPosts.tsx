@@ -53,7 +53,7 @@ const AdminPostPage: React.FC = () => {
           return;
         }
 
-        if (isHidden){
+        if (isHiddenValue){
             setErrorMessage("Post is now visible");
         }
         else{
@@ -98,7 +98,7 @@ const AdminPostPage: React.FC = () => {
       <h2 className="text-3xl font-semibold text-center mb-6 text-black pt-4">Controversial Posts</h2>
       <h3 className='text-center mb-6 text-black'>Posts are listed from most controversial to least controversial</h3>
       <p className="text-red-500 mt-4">
-            {errorMessage || "No results found."}
+            {errorMessage}
           </p>
 
       {/* Results*/}
