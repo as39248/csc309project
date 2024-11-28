@@ -20,8 +20,16 @@ export default async function handler(req, res) {
         try{
             // Fetch all comments, sort by the number of reports in descending order
             const comments = await prisma.comment.findMany({
-                // take: Number(take) || 10,
-                // skip: Number(skip) || 0,
+                select: {
+                    id: true,
+                    content: true,
+                    upvotes: true,
+                    downvotes: true,
+                    user: { select: { firstName: true, lastName: true } },
+                    upvotes: true,
+                    downvotes: true,
+                    isHidden: true,  // Make sure isHidden is included in the response
+                  },
                 orderBy: {
                     reports:{
                         _count: 'desc',
@@ -39,7 +47,7 @@ export default async function handler(req, res) {
         try{
             const {commentId, isHidden} = req.body;
 
-            if (!commentId || !isHidden){
+            if (!commentId){
                 return res.status(401).json({message: "Required information not given.",});
             }
 
@@ -53,8 +61,9 @@ export default async function handler(req, res) {
             
             // Change the visibility of the comment
             const comment = await prisma.comment.update({
+                
                 where: {id: Number(commentId)},
-                data: {isHidden: isHidden},
+                data: {isHidden: isHidden || false},
             });
             
             if (!comment){
