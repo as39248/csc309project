@@ -7,11 +7,13 @@ export default async function handler(req, res) {
     const user = verifyToken(req.headers.authorization);
 
     if (!user){
+        console.log("User is not authorized");
         return res.status(401).json({message: "Unauthorized"});
     }
 	
 	// Only allow admin permission to make requests here
     if (user.role !== 'ADMIN'){
+        console.log("User is not an admin");
         return res.status(401).json({message: "Unauthorized. Admin only.",});
     }
 
@@ -37,6 +39,8 @@ export default async function handler(req, res) {
             const {postId, isHidden} = req.body;
 
             if (!postId || !isHidden){
+                console.log("id or hidden value not given");
+                console.log({"postId": postId, "isHidden": isHidden});
                 return res.status(401).json({message: "Required information not given.",});
             }
 
@@ -44,9 +48,8 @@ export default async function handler(req, res) {
                 where: {id: postId},
             });
             
-            console.log({"postExists":postExists, "id": postId})
-
             if (!postExists){
+                console.log({"postExists":postExists, "id": postId});
                 return res.status(404).json({message: "Comment does not exist."});
             }
 
