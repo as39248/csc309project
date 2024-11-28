@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 interface SearchProps {
-  onSearch: (searchParams: { title?: string; content?: string; template?: string }) => void;
+  onSearch: (searchParams: { title?: string; content?: string; tag: string; template?: string }) => void;
 }
 
 const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
