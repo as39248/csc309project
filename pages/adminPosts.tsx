@@ -113,7 +113,10 @@ const AdminPostPage: React.FC = () => {
                 <button className="text-red-500 hover:underline" onClick={() =>
                     handlePostVisibility(post.id, post.isHidden)
                 }>Change Post Visibility</button>
+
+                {post.isHidden ? (<p className='text-blue-300 mt-2'>This post is hidden</p>):(<></>)}
               </li>
+              
             ))}
           </ul>
         ) : (
