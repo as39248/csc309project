@@ -12,9 +12,7 @@ interface Template {
 
 const TemplatePage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [results, setResults] = useState<Template[]>([]); 
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null); 
   const router = useRouter();
 
   const handleSearch = async ({ title, explanation, tags, code}: { title?: string; explanation?: string; tags?: string; code?: string }) => {

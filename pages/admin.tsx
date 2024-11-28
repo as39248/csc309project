@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import Link from "next/link";
 interface Post {
     id: number;
     title: string;
@@ -9,15 +9,7 @@ interface Post {
     downvotes: number;
 }
   
-interface Comment {
-    id: number;
-    content: string;
-    upvotes: number;
-    downvotes: number;
-    user: { firstName: string; lastName: string };
-    replies: Comment[];
-    parentId?: number;
-}
+
 
 const AdminPage: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -47,6 +39,31 @@ const AdminPage: React.FC = () => {
             setErrorMessage("");
         }
     };
+
+    return (
+        <main>
+        <section className="bg-white py-16">
+          <div className="container mx-auto px-6 text-center">
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              Admin Page
+            </h1>
+            <div className="flex justify-center space-x-4">
+              <Link href="/adminComments">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
+                  Look at controverisal comments
+                </button>
+              </Link>
+
+              <Link href="/adminPosts">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300">
+                    Look at controverisal comments
+                </button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
 
     
 };
