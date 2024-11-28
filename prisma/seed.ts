@@ -68,11 +68,7 @@ async function main() {
       data: {
         title: faker.lorem.words(3),
         explanation: faker.lorem.paragraph(),
-        tags: {
-          create: {
-            name: faker.lorem.word(), // This will create a new tag
-          },
-        },
+        tags: faker.lorem.word(),
         userId: faker.helpers.arrayElement(users).id,
         code: faker.lorem.paragraph(),
         isForked: faker.datatype.boolean(),
