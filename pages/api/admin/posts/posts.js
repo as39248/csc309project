@@ -37,11 +37,15 @@ export default async function handler(req, res) {
     else if (req.method === "PUT") {
         try{
             const {postId, isHidden} = req.body;
+            let isHiddenValue = isHidden;
 
-            if (!postId || !isHidden){
-                console.log("id or hidden value not given");
+            if (!postId){
+                console.log("id not given");
                 console.log({"postId": postId, "isHidden": isHidden});
-                return res.status(401).json({message: "Required information not given.",});
+                return res.status(401).json({message: "Unable to hide post: Required information not given.",});
+            }
+            if(!isHidden){
+                isHiddenValue = false;
             }
 
             const postExists = await prisma.post.findUnique({
@@ -50,7 +54,7 @@ export default async function handler(req, res) {
             
             if (!postExists){
                 console.log({"postExists":postExists, "id": postId});
-                return res.status(404).json({message: "Comment does not exist."});
+                return res.status(404).json({message: "Post does not exist."});
             }
 
             // Change the visibility of the post
