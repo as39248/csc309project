@@ -7,12 +7,12 @@ export default async function handler(req, res) {
     const user = verifyToken(req.headers.authorization);
 
     if  (!user){
-        return res.status(401).json({message: "Unauthorized",});
+        return res.status(401).json({message: "Unauthorized.",});
     }
 	
 	// Only allow admin permission to make requests here
     if(user.role !== 'ADMIN'){
-        return res.status(401).json({message: "Unauthorized",});
+        return res.status(401).json({message: "Unauthorized. Admin only.",});
     }
 
     if (req.method === "GET") {
