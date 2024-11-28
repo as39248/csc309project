@@ -23,10 +23,13 @@ const AdminCommentPage: React.FC = () => {
   },[]);
 
   const handleCommentVisibility = async (postId: number, isHidden: boolean) => {
-    let isHiddenValue = isHidden;
-    // if (typeof(isHidden) !== 'boolean'){
-    //   isHiddenValue = false;
-    // }
+    let isHiddenValue = false;
+      if (isHidden === false){
+        isHiddenValue = true;
+      }
+      else{
+        isHiddenValue = false;
+      }
     setErrorMessage("");
     const token = localStorage.getItem("accessToken");
     if (!token) {
@@ -40,7 +43,7 @@ const AdminCommentPage: React.FC = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, isHidden}),
+        body: JSON.stringify({ postId, isHiddenValue}),
     });
     const data = await response.json();
     if (!response.ok) {
@@ -48,11 +51,11 @@ const AdminCommentPage: React.FC = () => {
       return;
     }
 
-    if (isHiddenValue === true){
-        setErrorMessage("Comment is now visible");
+    if (isHiddenValue === false){
+      setErrorMessage("Comment is now visible");
     }
     else{
-        setErrorMessage("Comment is now hidden");
+      setErrorMessage("Comment is now hidden");
     }
 };
 
