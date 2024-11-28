@@ -53,7 +53,7 @@ const AdminPostPage: React.FC = () => {
           return;
         }
 
-        if (isHiddenValue){
+        if (isHiddenValue === false){
             setErrorMessage("Post is now visible");
         }
         else{
